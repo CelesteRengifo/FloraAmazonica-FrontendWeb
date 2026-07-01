@@ -1,0 +1,51 @@
+.barra-lateral {
+  width: 240px;
+  flex-shrink: 0;
+  background-color: var(--verde-oscuro);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.barra-lateral-logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 74px;
+}
+
+.barra-lateral-logo img {
+  height: 80px;
+  width: 90%;
+  padding: 1rem 0 0 0;
+  margin: 1rem 0 0 0;
+}
+
+.barra-lateral-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0rem;
+  padding: 2rem 0;
+}
+
+.barra-lateral-enlace {
+  color: #ffffff;
+  text-decoration: none;
+  padding: 1.5rem 2rem;
+  border-radius: 0rem;
+  opacity: 80%;
+  transition: background-color 0.2s, opacity 0.2s;
+  -webkit-user-select: none;
+  user-select: none;
+  font-size: 110%;
+}
+.barra-lateral-enlace:hover {
+  background-color: var(--verde-hover);
+  opacity:80%;
+}
+
+.barra-lateral-enlace-activo {
+  background-color: var(--verde-hover);
+  opacity: 1;
+  font-weight: bold;
+}

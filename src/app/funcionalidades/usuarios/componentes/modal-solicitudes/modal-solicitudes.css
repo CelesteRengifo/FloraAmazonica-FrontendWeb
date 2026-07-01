@@ -1,0 +1,149 @@
+.fondo-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 4rem;
+  z-index: 900;
+}
+
+.panel-solicitudes {
+  background: #fff;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 480px;
+  max-height: 70vh;
+  overflow-y: auto;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.encabezado-panel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--verde-claro);
+  position: sticky;
+  top: 0;
+  background: #fff;
+}
+
+.encabezado-panel h3 {
+  color: var(--verde-oscuro);
+  margin: 0;
+}
+
+.boton-cerrar {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  color: #666;
+}
+
+.sin-solicitudes {
+  padding: 1.5rem 1.25rem;
+  color: #777;
+  text-align: center;
+}
+
+.mensaje-error {
+  margin: 0.75rem 1.25rem 0;
+  color: #a13d3d;
+  font-size: 0.9rem;
+}
+
+.lista-solicitudes {
+  display: flex;
+  flex-direction: column;
+}
+
+.fila-solicitud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.9rem 1.25rem;
+  border-bottom: 1px solid #f0efe9;
+  gap: 1rem;
+}
+
+.datos-solicitud {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.nombre-solicitud {
+  font-weight: 600;
+  color: #333;
+}
+
+.correo-solicitud {
+  font-size: 0.85rem;
+  color: #666;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.fecha-solicitud {
+  font-size: 0.75rem;
+  color: #626262;
+}
+
+.acciones-solicitud {
+  display: flex;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.boton-confirmar {
+  background: var(--verde-oscuro);
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.boton-confirmar:hover {
+  background: var(--verde-hover);
+}
+
+.boton-eliminar {
+  background: transparent;
+  color: #a13d3d;
+  border: 1px solid #a13d3d;
+  border-radius: 6px;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.boton-eliminar:hover {
+  background: #f3e6e6;
+}
+
+.boton-confirmar:disabled,
+.boton-eliminar:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.fila-solicitud {
+  flex-wrap: wrap;
+}
+
+.selector-rol-solicitud {
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.8rem;
+  text-transform: capitalize;
+  background: #fff;
+}
+

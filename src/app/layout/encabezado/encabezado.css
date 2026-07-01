@@ -1,0 +1,54 @@
+.encabezado {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+  padding: 0 2rem;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e2e8e4;
+}
+
+.encabezado-titulo {
+  font-family: 'Almendra SC', serif;
+  font-weight: 700;
+  color: var(--verde-oscuro);
+  font-size: 2.5rem;
+}
+
+.encabezado-usuario {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.encabezado-nombre {
+  font-weight: 500;
+  margin-right: 3rem;
+  font-size: 1.2rem;
+}
+
+.encabezado-rol {
+  font-size: 0.75rem;
+  text-transform: capitalize;
+  color: #6b7a70;
+  background-color: var(--verde-claro);
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  margin-right: 3rem;
+  font-size: 1rem;
+}
+
+.encabezado-logout {
+  background-color: transparent;
+  border: 1px solid var(--verde-oscuro);
+  color: var(--verde-oscuro);
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.encabezado-logout:hover {
+  background-color: var(--verde-hover);
+  color: #ffffff;
+}

@@ -1,0 +1,65 @@
+<div class="pagina-usuarios">
+  <div class="encabezado-pagina">
+    <h2>Gestión de Usuarios</h2>
+
+    <button class="icono-solicitudes" (click)="abrirSolicitudes()" aria-label="Ver solicitudes pendientes">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="5" width="18" height="14" rx="2" />
+        <path d="M3 7l9 6 9-6" />
+      </svg>
+      @if (totalSolicitudes() > 0) {
+        <span class="insignia-contador">{{ totalSolicitudes() }}</span>
+      }
+    </button>
+  </div>
+
+  <div class="barra-filtros">
+    <input
+      class="campo-busqueda"
+      type="text"
+      placeholder="Buscar por nombre o correo..."
+      aria-label="Buscar usuario por nombre o correo"
+      (input)="onCambiarBusqueda($event)" />
+
+    <select class="selector-filtro" aria-label="Filtrar por rol" (change)="onCambiarFiltroRol($event)">
+      <option value="todos" [selected]="filtro().rol === 'todos'">Todos los roles</option>
+      <option value="registrador" [selected]="filtro().rol === 'registrador'">Registrador</option>
+      <option value="validador" [selected]="filtro().rol === 'validador'">Validador</option>
+      <option value="consultor" [selected]="filtro().rol === 'consultor'">Consultor</option>
+      <option value="administrador" [selected]="filtro().rol === 'administrador'">Administrador</option>
+    </select>
+    <select
+      class="selector-filtro"
+      aria-label="Filtrar por estado"
+      (change)="onCambiarFiltroEstado($event)">
+      <option value="todos" [selected]="filtro().estado === 'todos'">Todos los estados</option>
+      <option value="activos" [selected]="filtro().estado === 'activos'">Activos</option>
+      <option value="inactivos" [selected]="filtro().estado === 'inactivos'">Inactivos</option>
+    </select>
+  </div>
+
+  @if (cargandoLista()) {
+    <p class="estado-carga">Cargando usuarios...</p>
+  } @else if (usuariosFiltrados().length === 0) {
+    <p class="estado-vacio">No se encontraron usuarios.</p>
+  } @else {
+    <div class="lista-usuarios-grid">
+      @for (usuario of usuariosFiltrados(); track usuario.id) {
+        <app-tarjeta-usuario
+          [usuario]="usuario"
+          (cambiarEstado)="onCambiarEstado($event)"
+          (cambiarRol)="onCambiarRol($event)">
+        </app-tarjeta-usuario>
+      }
+    </div>
+  }
+</div>
+
+@if (modalSolicitudesAbierto()) {
+  <app-modal-solicitudes
+    [solicitudes]="solicitudes()"
+    (cerrar)="cerrarSolicitudes()"
+    (solicitudConfirmada)="onSolicitudConfirmada()"
+    (solicitudEliminada)="onSolicitudEliminada($event)">
+  </app-modal-solicitudes>
+}

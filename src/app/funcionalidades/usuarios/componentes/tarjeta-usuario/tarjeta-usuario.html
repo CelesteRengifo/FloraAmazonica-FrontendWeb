@@ -1,0 +1,33 @@
+<div class="tarjeta-usuario">
+  <div class="tarjeta-usuario-info">
+    <span class="tarjeta-usuario-nombre">
+      {{ usuario.first_name }} {{ usuario.paternal_last_name }} {{ usuario.maternal_last_name ?? '' }}
+    </span>
+    <span class="tarjeta-usuario-email">{{ usuario.email }}</span>
+  </div>
+
+  <div class="tarjeta-usuario-controles">
+    <select class="tarjeta-usuario-select-rol" (change)="alCambiarRol($event)" aria-label="Seleccionar rol">
+      @for (rol of rolesDisponibles; track rol) {
+        <option [value]="rol" [selected]="rol === usuario.role">{{ rol }}</option>
+      }
+    </select>
+
+    <span
+      class="tarjeta-usuario-estado"
+      [class.tarjeta-usuario-estado-activo]="usuario.is_active"
+      [class.tarjeta-usuario-estado-inactivo]="!usuario.is_active"
+    >
+      {{ usuario.is_active ? 'Activo' : 'Inactivo' }}
+    </span>
+
+    <button
+      class="tarjeta-usuario-boton"
+      [class.tarjeta-usuario-boton-desactivar]="usuario.is_active"
+      (click)="alCambiarEstado()"
+      aria-label="Cambiar estado"
+    >
+      {{ usuario.is_active ? 'Desactivar' : 'Activar' }}
+    </button>
+  </div>
+</div>

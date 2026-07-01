@@ -1,0 +1,83 @@
+.tarjeta-usuario {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem 1.5rem;
+  background-color: #ffffff;
+  border: 1px solid #e2e8e4;
+  border-radius: 0.75rem;
+}
+
+.tarjeta-usuario-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.tarjeta-usuario-nombre {
+  font-weight: 500;
+  color: #1f2b24;
+}
+
+.tarjeta-usuario-email {
+  font-size: 0.85rem;
+  color: #6b7a70;
+}
+
+.tarjeta-usuario-controles {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.tarjeta-usuario-select-rol {
+  border: 1px solid #e2e8e4;
+  border-radius: 0.5rem;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+  text-transform: capitalize;
+  background-color: #ffffff;
+}
+
+.tarjeta-usuario-estado {
+  font-size: 0.75rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-weight: 500;
+}
+
+.tarjeta-usuario-estado-activo {
+  background-color: var(--verde-claro);
+  color: var(--verde-oscuro);
+}
+
+.tarjeta-usuario-estado-inactivo {
+  background-color: #f3e6e6;
+  color: #a13d3d;
+}
+
+.tarjeta-usuario-boton {
+  border: 1px solid var(--verde-oscuro);
+  background-color: transparent;
+  color: var(--verde-oscuro);
+  padding: 0.4rem 1rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  font-size: 0.85rem;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.tarjeta-usuario-boton:hover {
+  background-color: var(--verde-hover);
+  color: #ffffff;
+}
+
+.tarjeta-usuario-boton-desactivar {
+  border-color: #a13d3d;
+  color: #a13d3d;
+}
+
+.tarjeta-usuario-boton-desactivar:hover {
+  background-color: #a13d3d;
+  color: #ffffff;
+}

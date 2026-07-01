@@ -1,0 +1,66 @@
+<div class="fondo-modal" (click)="cerrar.emit()">
+  <div class="panel-solicitudes" (click)="$event.stopPropagation()">
+    <div class="encabezado-panel">
+      <h3>Solicitudes de cuenta</h3>
+      <button class="boton-cerrar" (click)="cerrar.emit()" aria-label="Cerrar">✕</button>
+    </div>
+
+    @if (error()) {
+      <p class="mensaje-error">{{ error() }}</p>
+    }
+
+    @if (solicitudes().length === 0) {
+      <p class="sin-solicitudes">No hay solicitudes pendientes por ahora.</p>
+    } @else {
+      <div class="lista-solicitudes" role="list">
+        @for (usuario of solicitudes(); track usuario.id) {
+          <div class="fila-solicitud" role="listitem">
+            <div class="datos-solicitud">
+              <span class="nombre-solicitud">
+                {{ usuario.first_name }} {{ usuario.paternal_last_name }}
+              </span>
+              <span class="correo-solicitud">{{ usuario.email }}</span>
+              <span class="fecha-solicitud">{{ usuario.created_at | date: 'dd/MM/yyyy HH:mm' }}</span>
+            </div>
+
+            <select
+              class="selector-rol-solicitud"
+              aria-label="Rol a asignar"
+              [value]="rolSeleccionado(usuario.id)"
+              (change)="onCambiarRolSeleccionado(usuario.id, $event)">
+              <option value="" disabled selected>Seleccione un rol</option>
+              @for (rol of rolesDisponibles; track rol) {
+                <option [value]="rol">{{ rol }}</option>
+              }
+            </select>
+
+            <div class="acciones-solicitud">
+              <button
+                class="boton-confirmar"
+                [disabled]="cargando() === usuario.id || !puedeConfirmar(usuario.id)"
+                (click)="confirmar(usuario)">
+                Confirmar
+              </button>
+              <button
+                class="boton-eliminar"
+                [disabled]="cargando() === usuario.id"
+                (click)="pedirEliminar(usuario)">
+                Eliminar
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>
+
+@if (solicitudAEliminar(); as usuario) {
+  <app-modal-confirmacion
+    titulo="Eliminar solicitud"
+    [mensaje]="'¿Eliminar la solicitud de ' + usuario.first_name + ' ' + usuario.paternal_last_name + '? El correo ' + usuario.email + ' quedará disponible para volver a registrarse.'"
+    textoConfirmar="Eliminar"
+    (confirmar)="confirmarEliminar()"
+    (cancelar)="cancelarEliminar()">
+  </app-modal-confirmacion>
+}

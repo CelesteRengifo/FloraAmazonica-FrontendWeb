@@ -1,0 +1,13 @@
+<aside class="barra-lateral">
+  <div class="barra-lateral-logo">
+    <img src="LogoHorizontal.png" alt="Flora Amazónica" />
+  </div>
+
+  <nav class="barra-lateral-nav">
+    @for (elemento of elementosNav; track elemento.ruta) {
+      <a class="barra-lateral-enlace" [routerLink]="elemento.ruta" routerLinkActive="barra-lateral-enlace-activo">
+        {{ elemento.etiqueta }}
+      </a>
+    }
+  </nav>
+</aside>
