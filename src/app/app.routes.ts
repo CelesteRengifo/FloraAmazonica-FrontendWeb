@@ -27,19 +27,19 @@ export const routes: Routes = [
         data: { roles: ['administrador'] },
         children: [
           {
-            path: 'carga',
+            path: 'familias-especies',
             loadComponent: () =>
-              import('./funcionalidades/catalogo-base/paginas/carga-excel/carga-excel').then(m => m.CargaExcel)
+              import('./funcionalidades/catalogo-base/paginas/familias-especies/familias-especies').then(m => m.FamiliasEspecies)
           },
           {
-            path: 'edicion',
+            path: 'formulario',
             loadComponent: () =>
-              import('./funcionalidades/catalogo-base/paginas/edicion-catalogo/edicion-catalogo').then(m => m.EdicionCatalogo)
+              import('./funcionalidades/catalogo-base/paginas/formulario/formulario').then(m => m.Formulario)
           },
           {
-            path: 'morfologia',
-            loadComponent: () =>
-              import('./funcionalidades/catalogo-base/paginas/valores-morfologicos/valores-morfologicos').then(m => m.ValoresMorfologicos)
+            path: '',
+            redirectTo: 'familias-especies',
+            pathMatch: 'full'
           }
         ]
       },
@@ -59,5 +59,5 @@ export const routes: Routes = [
     path: '**',
     redirectTo: 'login'
   }
-  
+
 ];
