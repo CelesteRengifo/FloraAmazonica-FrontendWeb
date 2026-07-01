@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ValoresMorfologicos } from './valores-morfologicos';
+import { VistaPreviaImportacion } from './vista-previa-importacion';
 
-describe('ValoresMorfologicos', () => {
-  let component: ValoresMorfologicos;
-  let fixture: ComponentFixture<ValoresMorfologicos>;
+describe('VistaPreviaImportacion', () => {
+  let component: VistaPreviaImportacion;
+  let fixture: ComponentFixture<VistaPreviaImportacion>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ValoresMorfologicos],
+      imports: [VistaPreviaImportacion],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ValoresMorfologicos);
+    fixture = TestBed.createComponent(VistaPreviaImportacion);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

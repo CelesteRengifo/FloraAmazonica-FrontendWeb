@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CargaExcel } from './carga-excel';
+import { FamiliasEspecies } from './familias-especies';
 
-describe('CargaExcel', () => {
-  let component: CargaExcel;
-  let fixture: ComponentFixture<CargaExcel>;
+describe('FamiliasEspecies', () => {
+  let component: FamiliasEspecies;
+  let fixture: ComponentFixture<FamiliasEspecies>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CargaExcel],
+      imports: [FamiliasEspecies],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CargaExcel);
+    fixture = TestBed.createComponent(FamiliasEspecies);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

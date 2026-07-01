@@ -4,10 +4,39 @@
   </div>
 
   <nav class="barra-lateral-nav">
-    @for (elemento of elementosNav; track elemento.ruta) {
-      <a class="barra-lateral-enlace" [routerLink]="elemento.ruta" routerLinkActive="barra-lateral-enlace-activo">
-        {{ elemento.etiqueta }}
-      </a>
+    @for (elemento of elementosNav; track elemento.etiqueta) {
+      @if (elemento.ruta) {
+        <a
+          class="barra-lateral-enlace"
+          [routerLink]="elemento.ruta"
+          routerLinkActive="barra-lateral-enlace-activo"
+        >
+          {{ elemento.etiqueta }}
+        </a>
+      } @else {
+        <div class="grupo-nav" [class.grupo-fijado]="grupoEstaFijado(elemento.etiqueta)">
+          <button
+            type="button"
+            class="barra-lateral-enlace barra-lateral-enlace-padre"
+            (click)="alternarGrupo(elemento.etiqueta)"
+          >
+            {{ elemento.etiqueta }}
+            <span class="icono-chevron">▾</span>
+          </button>
+
+          <div class="submenu">
+            @for (subElemento of elemento.subElementos; track subElemento.ruta) {
+              <a
+                class="barra-lateral-enlace barra-lateral-subenlace"
+                [routerLink]="subElemento.ruta"
+                routerLinkActive="barra-lateral-enlace-activo"
+              >
+                {{ subElemento.etiqueta }}
+              </a>
+            }
+          </div>
+        </div>
+      }
     }
   </nav>
 </aside>

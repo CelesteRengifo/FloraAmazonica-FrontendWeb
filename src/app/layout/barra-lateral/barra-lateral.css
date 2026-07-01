@@ -38,14 +38,81 @@
   -webkit-user-select: none;
   user-select: none;
   font-size: 110%;
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
 }
+
 .barra-lateral-enlace:hover {
   background-color: var(--verde-hover);
-  opacity:80%;
+  opacity: 80%;
 }
 
 .barra-lateral-enlace-activo {
   background-color: var(--verde-hover);
   opacity: 1;
   font-weight: bold;
+}
+
+/* ── Grupo con sub-ítems (acordeón) ─────────────────────────────── */
+
+.grupo-nav {
+  display: flex;
+  flex-direction: column;
+}
+
+.barra-lateral-enlace-padre {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.icono-chevron {
+  font-size: 80%;
+  transition: transform 0.2s;
+  opacity: 0.7;
+}
+
+/* El submenú empuja el contenido de abajo: altura real, no overlay */
+.submenu {
+  max-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: max-height 0.25s ease;
+}
+
+/* Preview por hover: se muestra mientras el cursor está encima del grupo,
+   pero NO se marca como fijado, así que al salir se vuelve a contraer.
+   Esto es intencional: es solo "vista previa", no navegable de forma confiable. */
+.grupo-nav:hover .submenu {
+  max-height: 200px;
+}
+
+.grupo-nav:hover .icono-chevron {
+  transform: rotate(180deg);
+}
+
+/* Fijado por clic: se mantiene abierto aunque el cursor salga del grupo,
+   permitiendo entrar al submenú y hacer clic en un sub-ítem sin que se cierre. */
+.grupo-nav.grupo-fijado .submenu {
+  max-height: 200px;
+}
+
+.grupo-nav.grupo-fijado .icono-chevron {
+  transform: rotate(180deg);
+}
+
+.barra-lateral-subenlace {
+  padding: 1rem 2rem 1rem 3rem;
+  font-size: 95%;
+  opacity: 70%;
+}
+
+.barra-lateral-subenlace:hover {
+  opacity: 90%;
 }
