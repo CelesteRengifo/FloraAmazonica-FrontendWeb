@@ -1,0 +1,31 @@
+<!-- funcionalidades/catalogo-base/componentes/modal-seccion/modal-seccion.html -->
+
+<div class="fondo-modal" (click)="onCerrar()">
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <div class="cabecera">
+      <h2>{{ esEdicion ? 'Editar sección' : 'Nueva sección' }}</h2>
+      <button class="btn-icono" type="button" (click)="onCerrar()" aria-label="Cerrar">✕</button>
+    </div>
+
+    <div class="cuerpo">
+      <div class="grupo-campo">
+        <label class="etiqueta" for="nombre">Nombre de la sección</label>
+        <input id="nombre" class="entrada" type="text" [(ngModel)]="nombre"
+               placeholder="Ej: Datos dasométricos"
+               (keydown.enter)="onConfirmar()" />
+        <p class="ayuda">Agrupa los campos morfológicos relacionados bajo un mismo bloque.</p>
+      </div>
+    </div>
+
+    <div class="pie">
+      <button type="button" class="btn-secundario" (click)="onCerrar()">Cancelar</button>
+      <button type="button" class="btn-primario"
+              [disabled]="!puedeConfirmar()"
+              (click)="onConfirmar()">
+        {{ esEdicion ? 'Guardar cambios' : 'Crear sección' }}
+      </button>
+    </div>
+
+  </div>
+</div>

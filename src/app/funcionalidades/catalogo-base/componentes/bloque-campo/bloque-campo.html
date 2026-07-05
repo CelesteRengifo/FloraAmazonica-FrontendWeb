@@ -12,7 +12,9 @@
         @if (campo.is_required) {
           <span class="badge badge-obligatorio">Obligatorio</span>
         }
-        @if (campo.selection_type === 'multiple') {
+        @if (campo.field_type === 'number') {
+          <span class="badge badge-neutro">Numérico</span>
+        } @else if (campo.selection_type === 'multiple') {
           <span class="badge badge-multiple">Múltiple</span>
         } @else {
           <span class="badge badge-neutro">Única</span>
@@ -24,7 +26,8 @@
     </div>
 
     <div class="bloque-acciones">
-      <button class="btn-icono" type="button" title="Editar campo" (click)="onEditarCampo()">✎</button>
+      <button class="btn-icono" type="button" title="Editar campo"
+              (click)="onEditarCampo()">✎</button>
       <button class="btn-icono" type="button"
               [title]="campo.activo ? 'Desactivar campo' : 'Activar campo'"
               (click)="onAlternarCampo()">
@@ -33,25 +36,37 @@
     </div>
   </div>
 
-  <div class="bloque-opciones">
-    @for (opcion of campo.opciones; track opcion.id) {
-      <div class="fila-opcion" [class.opcion-inactiva]="!opcion.is_active">
-        <span class="marca" [class.marca-multiple]="campo.selection_type === 'multiple'"></span>
-        <span class="texto-opcion">{{ opcion.option_value }}</span>
-        <div class="acciones-opcion">
-          <button class="btn-mini" type="button" title="Editar opción"
-                  (click)="onEditarOpcion(opcion)">✎</button>
-          <button class="btn-mini" type="button"
-                  [title]="opcion.is_active ? 'Desactivar opción' : 'Activar opción'"
-                  (click)="onAlternarOpcion(opcion)">
-            {{ opcion.is_active ? '◉' : '○' }}
-          </button>
+  <!-- Campo numérico -->
+  @if (campo.field_type === 'number') {
+    <div class="bloque-numerico">
+      <span class="etiqueta-unidad">Unidad:</span>
+      <span class="valor-unidad">{{ campo.opciones[0].option_value }}</span>
+    </div>
+  } @else {
+    <!-- Campo de opciones -->
+    <div class="bloque-opciones">
+      @for (opcion of campo.opciones; track opcion.id) {
+        <div class="fila-opcion" [class.opcion-inactiva]="!opcion.is_active">
+          <span class="marca" [class.marca-multiple]="campo.selection_type === 'multiple'"></span>
+          <span class="texto-opcion">{{ opcion.option_value }}</span>
+          @if (opcion.option_value === 'Otro') {
+            <span class="etiqueta-otro">+ texto libre</span>
+          }
+          <div class="acciones-opcion">
+            <button class="btn-mini" type="button" title="Editar opción"
+                    (click)="onEditarOpcion(opcion)">✎</button>
+            <button class="btn-mini" type="button"
+                    [title]="opcion.is_active ? 'Desactivar opción' : 'Activar opción'"
+                    (click)="onAlternarOpcion(opcion)">
+              {{ opcion.is_active ? '◉' : '○' }}
+            </button>
+          </div>
         </div>
-      </div>
-    }
-    <button class="btn-agregar-opcion" type="button" (click)="onAgregarOpcion()">
-      + Agregar opción
-    </button>
-  </div>
+      }
+      <button class="btn-agregar-opcion" type="button" (click)="onAgregarOpcion()">
+        + Agregar opción
+      </button>
+    </div>
+  }
 
 </div>

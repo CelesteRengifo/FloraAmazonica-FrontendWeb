@@ -77,7 +77,7 @@ export class ValoresMorfologicosServicio {
    */
   actualizarMetadatosCampo(
     ids: string[],
-    metadatos: Pick<ActualizarValorMorfologico, 'section' | 'field_name' | 'selection_type' | 'is_required'>,
+    metadatos: Pick<ActualizarValorMorfologico, 'section' | 'field_name' | 'selection_type' | 'field_type' | 'is_required'>,
   ): Observable<ValorMorfologico[]> {
     const peticiones = ids.map((id) => this.actualizar(id, metadatos));
     return forkJoin(peticiones);
@@ -127,6 +127,7 @@ export class ValoresMorfologicosServicio {
           section: v.section,
           field_name: v.field_name,
           selection_type: v.selection_type,
+          field_type: v.field_type,
           is_required: v.is_required,
           display_order: v.display_order,
           activo: false,

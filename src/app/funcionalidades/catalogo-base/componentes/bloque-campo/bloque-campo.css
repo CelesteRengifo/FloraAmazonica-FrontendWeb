@@ -172,3 +172,27 @@
 .btn-agregar-opcion:hover {
   opacity: 0.75;
 }
+.bloque-numerico {
+  border-top: 1px solid #eceae4;
+  padding: 0.65rem 0.9rem 0.75rem 2.55rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.etiqueta-unidad {
+  font-size: 0.8rem;
+  color: #999;
+}
+
+.valor-unidad {
+  font-size: 0.83rem;
+  font-weight: 600;
+  color: #555;
+}
+
+.etiqueta-otro {
+  font-size: 0.72rem;
+  color: #999;
+  font-style: italic;
+}

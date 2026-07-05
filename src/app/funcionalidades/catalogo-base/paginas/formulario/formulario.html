@@ -7,10 +7,12 @@
       <h1>Formulario de registro</h1>
       <p class="subtitulo">Configura los campos morfológicos que verá el registrador según el hábito.</p>
     </div>
-    <button class="btn-nuevo" type="button" (click)="abrirNuevo()">+ Nuevo campo</button>
+    <div class="acciones-cabecera">
+      <button class="btn-secundario" type="button" (click)="crearSeccion()">+ Nueva sección</button>
+      <button class="btn-nuevo" type="button" (click)="abrirNuevo()">+ Nuevo campo</button>
+    </div>
   </div>
 
-  <!-- Selector de hábito -->
   <p class="etiqueta-seccion">Hábito</p>
   <div class="pills-habito">
     @for (habito of habitos; track habito) {
@@ -25,44 +27,104 @@
     Campos morfológicos — <span class="habito-nombre">{{ habitoActual }}</span>
   </p>
 
-  <!-- Bloque fijo de catálogo (siempre primero, no arrastrable) -->
-  <app-bloque-catalogo
-    [config]="configCatalogo"
-    (guardar)="onGuardarConfigCatalogo($event)">
-  </app-bloque-catalogo>
-
   @if (cargando) {
     <p class="estado">Cargando…</p>
   }
 
-  @if (!cargando && campos.length === 0) {
+  @if (!cargando && items.length === 0) {
     <div class="vacio">
       <p>Este hábito aún no tiene campos morfológicos configurados.</p>
-      <button class="btn-nuevo" type="button" (click)="abrirNuevo()">+ Crear el primer campo</button>
+      <div class="vacio-acciones">
+        <button class="btn-secundario" type="button" (click)="crearSeccion()">+ Nueva sección</button>
+        <button class="btn-nuevo" type="button" (click)="abrirNuevo()">+ Nuevo campo</button>
+      </div>
     </div>
   }
 
-  <!-- Bloques arrastrables -->
-  <div class="lista-bloques">
-    @for (campo of campos; track campo.clave; let i = $index) {
-      <div draggable="true"
-           (dragstart)="onArrastrarInicio(i)"
-           (dragover)="onArrastrarSobre($event)"
-           (drop)="onSoltar(i)">
-        <app-bloque-campo
-          [campo]="campo"
-          (editarCampo)="abrirEdicion($event)"
-          (alternarCampo)="alternarCampo($event)"
-          (agregarOpcion)="agregarOpcion($event)"
-          (editarOpcion)="editarOpcion($event)"
-          (alternarOpcion)="alternarOpcion($event)">
-        </app-bloque-campo>
-      </div>
-    }
-  </div>
+  @if (!cargando && items.length > 0) {
 
-  @if (!cargando && campos.length > 0) {
-    <button class="btn-anadir" type="button" (click)="abrirNuevo()">+ Añadir campo</button>
+    <div class="lista-grupos"
+         cdkDropList
+         id="lista-principal"
+         [cdkDropListData]="items"
+         [cdkDropListConnectedTo]="idsListasSecciones"
+         (cdkDropListDropped)="onSoltarEnPrincipal($event)">
+
+      @for (item of items; track (item.tipo === 'seccion' ? item.seccion.id : item.campo.clave)) {
+
+        @if (item.tipo === 'seccion') {
+          <div class="bloque-seccion" cdkDrag [cdkDragData]="item">
+
+            <div class="seccion-cabecera" cdkDragHandle>
+              <span class="asa-seccion">☰</span>
+              <span class="seccion-nombre">{{ item.seccion.name }}</span>
+              <button class="btn-icono-sm" type="button" title="Editar sección"
+                      (click)="iniciarEdicionSeccion(item.seccion)">✎</button>
+              <button class="btn-icono-sm btn-eliminar" type="button" title="Eliminar sección"
+                      (click)="eliminarSeccion(item.seccion)">🗑</button>
+            </div>
+
+            <div class="seccion-campos"
+                 cdkDropList
+                 [id]="'lista-' + item.seccion.id"
+                 [cdkDropListData]="item.campos"
+                 [cdkDropListConnectedTo]="idsTodasLasListas"
+                 [cdkDropListEnterPredicate]="soloCampos"
+                 (cdkDropListDropped)="onSoltarEnSeccion($event, item.seccion)">
+
+              @for (campo of item.campos; track campo.clave) {
+                <div cdkDrag [cdkDragData]="campo" class="campo-drag">
+                  <app-bloque-campo
+                    [campo]="campo"
+                    (editarCampo)="abrirEdicion($event)"
+                    (alternarCampo)="alternarCampo($event)"
+                    (agregarOpcion)="agregarOpcion($event)"
+                    (editarOpcion)="editarOpcion($event)"
+                    (alternarOpcion)="alternarOpcion($event)">
+                  </app-bloque-campo>
+                </div>
+              }
+
+              @if (item.campos.length === 0) {
+                <p class="zona-vacia-texto">Arrastra campos aquí</p>
+              }
+
+            </div>
+
+            <button class="btn-nuevo-campo-seccion" type="button"
+                    (click)="abrirNuevo(item.seccion.name)">
+              + Nuevo campo
+            </button>
+
+          </div>
+
+        } @else {
+
+          <div cdkDrag [cdkDragData]="item" class="campo-drag campo-suelto">
+            <app-bloque-campo
+              [campo]="item.campo"
+              (editarCampo)="abrirEdicion($event)"
+              (alternarCampo)="alternarCampo($event)"
+              (agregarOpcion)="agregarOpcion($event)"
+              (editarOpcion)="editarOpcion($event)"
+              (alternarOpcion)="alternarOpcion($event)">
+            </app-bloque-campo>
+          </div>
+
+        }
+
+      }
+
+    </div>
+
+    <div class="pie-pagina">
+      <button class="btn-guardar" type="button"
+              [disabled]="!hayCambios"
+              (click)="guardarCambios()">
+        Guardar cambios
+      </button>
+    </div>
+
   }
 
 </div>
@@ -72,9 +134,19 @@
     [campo]="campoEnEdicion"
     [habitoActual]="habitoActual"
     [habitosGemelos]="habitosGemelos"
+    [seccionInicial]="seccionContexto"
+    [seccionesPorHabito]="seccionesPorHabito"
     (confirmar)="onConfirmarModal($event)"
     (cerrar)="cerrarModal()">
   </app-modal-campo>
+}
+
+@if (modalSeccionAbierto) {
+  <app-modal-seccion
+    [seccion]="seccionEnEdicion"
+    (confirmar)="onConfirmarModalSeccion($event)"
+    (cerrar)="cerrarModalSeccion()">
+  </app-modal-seccion>
 }
 
 @if (mensaje) {
