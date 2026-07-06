@@ -14,3 +14,9 @@ html, body, app-root {
   padding: 0;
   overflow: hidden;
 }
+
+/* Fix tiles Leaflet — evita que el reset de Tailwind deforme las imágenes del mapa */
+.leaflet-container img,
+.leaflet-tile {
+  max-width: none !important;
+}

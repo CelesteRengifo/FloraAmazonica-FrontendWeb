@@ -3,16 +3,18 @@
   max-width: 860px;
   margin: 0 auto;
 }
-.pill-familia
+
+.pill-familia,
 .pill-habito {
   text-transform: capitalize;
   color: #6b7a70;
-  background-color:var(--verde-claro);
+  background-color: var(--verde-claro);
   padding: 0.25rem 0.75rem;
   border-radius: 999px;
   font-size: 0.85rem;
   white-space: nowrap;
 }
+
 .ficha-estado {
   text-align: center;
   color: #9ca3af;
@@ -51,6 +53,9 @@
 }
 
 .header-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
   font-size: 0.875rem;
   color: #6b7280;
 }
@@ -242,29 +247,47 @@
 .coordenadas {
   display: flex;
   gap: 16px;
+  flex-wrap: wrap;
   font-size: 0.8rem;
   color: #6b7280;
   margin-bottom: 12px;
 }
 
-.mapa-placeholder {
-  display: flex;
-  flex-direction: column;
+.coord-item {
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  height: 200px;
-  background: #f3f4f6;
-  border-radius: 8px;
-  color: #9ca3af;
-  border: 1px dashed #d1d5db;
+  gap: 4px;
 }
 
-.mapa-placeholder p {
-  font-size: 0.875rem;
-  margin: 0;
-}
+/* ── RESPONSIVE ── */
+@media (max-width: 640px) {
+  .ficha-contenedor {
+    padding: 16px 12px;
+  }
 
-.mapa-placeholder small {
-  font-size: 0.75rem;
+  .ficha-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-cambiar-estado {
+    width: 100%;
+  }
+
+  .seccion {
+    padding: 16px;
+  }
+
+  .datos-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .nombre-cientifico {
+    font-size: 1.25rem;
+  }
+
+  .miniatura img {
+    width: 60px;
+    height: 60px;
+  }
 }

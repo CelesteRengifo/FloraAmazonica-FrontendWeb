@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ValidacionService } from '../../servicios/validacion.service';
 import { FichaRegistro } from '../../modelos/validacion.models';
 import { ModalEstado } from '../../componentes/modal-estado';
+import { MapaRegistro } from '../../../../shared/componentes/mapa-registro/mapa-registro';
 
 @Component({
   selector: 'app-detalle-validacion',
   standalone: true,
-  imports: [CommonModule, ModalEstado],
+  imports: [CommonModule, ModalEstado, MapaRegistro],
   templateUrl: './detalle-validacion.html',
   styleUrl: './detalle-validacion.css'
 })
