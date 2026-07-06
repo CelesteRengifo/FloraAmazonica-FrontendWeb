@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FichaRegistro, RegistroPendiente, PaginatedResult, ChangeStatusPayload, EstadoRegistro } from '../modelos/validacion.models';
+import { environment } from '../../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class ValidacionService {
-  private readonly base = 'http://localhost:3000/validacion';
+  private readonly base = `${environment.apiUrl}/validacion`;
 
   constructor(private http: HttpClient) {}
 
