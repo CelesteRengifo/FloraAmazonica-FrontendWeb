@@ -338,19 +338,16 @@ form {
     overflow: hidden;
   }
 
-  /* El panel izquierdo ocupa altura fija como encabezado */
   .panel-izquierdo {
     flex: 0 0 30vh;
     height: 30vh;
     width: 100%;
   }
 
-  /* El video en móvil: ancla al centro, se recorta arriba/abajo */
   .bg-video {
     object-position: center center;
   }
 
-  /* El texto del panel en móvil: centrado y más compacto */
   .panel-izquierdo-contenido {
     align-items: center;
     justify-content: flex-end;
@@ -363,7 +360,6 @@ form {
     text-align: center;
   }
 
-  /* El panel derecho ocupa el resto y hace scroll si hace falta */
   .panel-derecho {
     flex: 1 1 auto;
     overflow-y: auto;
@@ -374,4 +370,230 @@ form {
   form {
     width: 100%;
   }
+}
+
+/* ────────────────────────────────────────
+   Modal Registrador
+──────────────────────────────────────── */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 25, 18, 0.55);
+  -webkit-backdrop-filter: blur(4px);
+  backdrop-filter: blur(4px);
+
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: fadeInBackdrop 0.2s ease;
+}
+
+@keyframes fadeInBackdrop {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.modal-registrador {
+  background: #faf8f4;
+  border-radius: 20px;
+  padding: 2.5rem 2rem 2rem;
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  position: relative;
+  box-shadow: 0 20px 60px rgba(15, 25, 18, 0.25);
+  animation: slideUpModal 0.25s ease;
+}
+
+@keyframes slideUpModal {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.modal-cerrar {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--texto-muted);
+  padding: 0.3rem;
+  border-radius: 6px;
+  display: flex;
+  transition: color 0.2s, background 0.2s;
+}
+
+.modal-cerrar:hover {
+  color: var(--texto);
+  background: var(--verde-claro);
+}
+
+.modal-icono-wrap {
+  width: 72px;
+  height: 72px;
+  background: var(--verde-claro);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-hoja {
+  width: 44px;
+  height: 44px;
+}
+
+.modal-texto {
+  text-align: center;
+}
+
+.modal-texto h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  color: var(--texto);
+  margin-bottom: 0.5rem;
+  letter-spacing: -0.02em;
+}
+
+.modal-texto p {
+  font-size: 0.9rem;
+  color: var(--texto-suave);
+  line-height: 1.6;
+}
+
+.modal-texto strong {
+  color: var(--verde-oscuro);
+  font-weight: 700;
+}
+
+.modal-divisor {
+  width: 40px;
+  height: 2px;
+  background: var(--verde-claro);
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.modal-app-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.modal-logo-app {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(45, 106, 69, 0.18);
+}
+
+.modal-nombre-app {
+  font-family: 'Playfair Display', serif;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--verde-oscuro);
+  letter-spacing: 0.01em;
+}
+
+/* Botón descargar móvil */
+.btn-descargar {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.8rem;
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+}
+
+.btn-android {
+  background: var(--verde-oscuro);
+  color: white;
+  box-shadow: 0 2px 12px rgba(45, 106, 69, 0.3);
+}
+
+.btn-android:hover {
+  background: var(--verde-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(45, 106, 69, 0.4);
+}
+
+.btn-ios {
+  background: #1a1a14;
+  color: white;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-ios:hover {
+  background: #333328;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Vista desktop: QR */
+.modal-desktop-hint {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.82rem;
+  color: var(--texto-suave);
+  text-align: center;
+}
+
+.qr-link:hover {
+  color: var(--verde-hover);
+  text-decoration: underline;
+}
+
+/* QR doble para desktop */
+.modal-qr-doble {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+}
+
+.modal-qr-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.modal-qr-img {
+  width: 110px;
+  height: 110px;
+  object-fit: contain;
+  border-radius: 12px;
+  background: white;
+  padding: 6px;
+  box-shadow: 0 2px 12px rgba(45, 106, 69, 0.15);
+  border: 1.5px solid var(--verde-claro);
+}
+
+.modal-qr-label {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--verde-oscuro);
+}
+
+.modal-qr-separador {
+  width: 1px;
+  height: 90px;
+  background: var(--verde-claro);
+  flex-shrink: 0;
 }

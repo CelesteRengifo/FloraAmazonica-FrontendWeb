@@ -8,13 +8,7 @@ import { AutenticacionServicio } from '../../../../core/servicios/autenticacion.
 import { environment } from '../../../../../environments/environment';
 
 type CampoLogin = 'email' | 'password';
-
-type CampoRegistro =
-  | 'first_name'
-  | 'paternal_last_name'
-  | 'maternal_last_name'
-  | 'email'
-  | 'password';
+type CampoRegistro = 'first_name' | 'paternal_last_name' | 'maternal_last_name' | 'email' | 'password';
 
 @Component({
   selector: 'app-login',
@@ -28,6 +22,7 @@ export class Login implements AfterViewInit {
   @ViewChild('vid2') vid2!: ElementRef<HTMLVideoElement>;
 
   vistaActiva: 'login' | 'registro' = 'login';
+  mostrarModalRegistrador = false;
 
   loginForm = { email: '', password: '' };
 
@@ -55,6 +50,9 @@ export class Login implements AfterViewInit {
     password?: string;
   } = {};
 
+  readonly LINK_ANDROID = 'https://drive.google.com/drive/folders/1IpxPiaUzpCJy7avGfAiVEcNlUR04jWYV?usp=sharing';
+  readonly LINK_IOS     = 'https://drive.google.com/drive/folders/1NB3ok5NjitdD9GjYn-_jtDY-qCtNicxi?usp=sharing';
+
   constructor(
     private autenticacion: AutenticacionServicio,
     private router: Router,
@@ -66,21 +64,25 @@ export class Login implements AfterViewInit {
     const v1 = this.vid1.nativeElement;
     const v2 = this.vid2.nativeElement;
 
-    v1.muted = true;
-    v2.muted = true;
+    [v1, v2].forEach(v => {
+      v.muted = true;
+      v.defaultMuted = true;
+      v.volume = 0;
+    });
 
     v1.style.opacity = '1';
     v2.style.opacity = '0';
     v1.play().catch(() => {});
   }
-
   onVideoTerminado(indice: number): void {
-    const actual = indice === 0 ? this.vid1.nativeElement : this.vid2.nativeElement;
+    const actual    = indice === 0 ? this.vid1.nativeElement : this.vid2.nativeElement;
     const siguiente = indice === 0 ? this.vid2.nativeElement : this.vid1.nativeElement;
 
     actual.style.opacity = '0';
     actual.currentTime = 0;
 
+    siguiente.muted = true;
+    siguiente.volume = 0;
     siguiente.style.opacity = '1';
     siguiente.play().catch(() => {});
   }
@@ -101,6 +103,20 @@ export class Login implements AfterViewInit {
     this.limpiarFormularioLogin();
     this.limpiarFormularioRegistro();
     this.cdr.detectChanges();
+  }
+
+  cerrarModalRegistrador(): void {
+    this.mostrarModalRegistrador = false;
+    this.loginForm.password = '';
+    this.mostrarContrasena = false;
+    this.cdr.detectChanges();
+  }
+
+  get sistemaOperativo(): 'android' | 'ios' | 'desktop' {
+    const ua = navigator.userAgent.toLowerCase();
+    if (/android/.test(ua)) return 'android';
+    if (/iphone|ipad|ipod/.test(ua)) return 'ios';
+    return 'desktop';
   }
 
   private limpiarEstado(): void {
@@ -141,7 +157,7 @@ export class Login implements AfterViewInit {
   private validarLogin(): boolean {
     this.erroresLogin = {};
     let valido = true;
-    const email = this.loginForm.email.trim();
+    const email    = this.loginForm.email.trim();
     const password = this.loginForm.password.trim();
 
     if (!email) {
@@ -163,10 +179,10 @@ export class Login implements AfterViewInit {
   private validarRegistro(): boolean {
     this.erroresRegistro = {};
     let valido = true;
-    const firstName = this.registroForm.first_name.trim();
+    const firstName        = this.registroForm.first_name.trim();
     const paternalLastName = this.registroForm.paternal_last_name.trim();
-    const email = this.registroForm.email.trim();
-    const password = this.registroForm.password.trim();
+    const email            = this.registroForm.email.trim();
+    const password         = this.registroForm.password.trim();
 
     if (!firstName) {
       this.erroresRegistro.first_name = 'Los nombres son obligatorios.';
@@ -208,7 +224,7 @@ export class Login implements AfterViewInit {
     this.cargando = true;
     this.cdr.detectChanges();
 
-    const email = this.loginForm.email.trim();
+    const email    = this.loginForm.email.trim();
     const password = this.loginForm.password;
 
     this.autenticacion.login(email, password).subscribe({
@@ -218,10 +234,20 @@ export class Login implements AfterViewInit {
         this.cdr.detectChanges();
 
         const rol = this.autenticacion.obtenerRol();
-        if (rol === 'administrador') this.router.navigate(['/usuarios']);
-        else if (rol === 'validador') this.router.navigate(['/validacion']);
-        else if (rol === 'consultor') this.router.navigate(['/consulta']);
-        else this.router.navigate(['/login']);
+        if (rol === 'administrador') {
+          this.router.navigate(['/usuarios']);
+        } else if (rol === 'validador') {
+          this.router.navigate(['/validacion']);
+        } else if (rol === 'consultor') {
+          this.router.navigate(['/consulta']);
+        } else if (rol === 'registrador') {
+          localStorage.removeItem('token');
+          localStorage.removeItem('usuario');
+          this.mostrarModalRegistrador = true;
+          this.cdr.detectChanges();
+        } else {
+          this.router.navigate(['/login']);
+        }
       },
       error: (err) => {
         this.cargando = false;
