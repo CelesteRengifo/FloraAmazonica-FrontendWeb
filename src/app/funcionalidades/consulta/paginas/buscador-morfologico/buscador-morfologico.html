@@ -1,0 +1,163 @@
+<div class="buscador-pagina">
+
+  <!-- ── PASO 1: Elegir hábito ────────────────────────── -->
+  @if (paso() === 'habito') {
+    <div class="paso-habito">
+      <h1 class="titulo-paso">¿Qué tipo de planta es?</h1>
+      <p class="subtitulo-paso">Elige el hábito que mejor se parece a la planta que buscas.</p>
+
+      @if (error()) {
+        <p class="error-msg">{{ error() }}</p>
+      }
+
+      <div class="grilla-habitos">
+        @for (h of habitos; track h.valor) {
+          <button
+            class="tarjeta-habito"
+            [class.sin-imagen]="h.valor === ''"
+            [disabled]="cargandoFiltros()"
+            (click)="elegirHabito(h.valor)">
+            @if (h.valor !== '') {
+              <span class="habito-etiqueta">{{ h.etiqueta }}</span>
+            } @else {
+              <span class="habito-icono">?</span>
+              <span class="habito-etiqueta-oscura">{{ h.etiqueta }}</span>
+            }
+          </button>
+        }
+      </div>
+
+      @if (cargandoFiltros()) {
+        <p class="cargando-texto">Cargando filtros...</p>
+      }
+    </div>
+  }
+
+  <!-- ── PASO 2: Filtros por sección ──────────────────── -->
+  @if (paso() === 'filtros') {
+    <div class="paso-filtros">
+      <div class="filtros-encabezado">
+        <button class="btn-volver" (click)="volverAHabito()">← Volver</button>
+        <h2 class="titulo-paso">¿Qué caracteres ves?</h2>
+        <p class="subtitulo-paso">Marca todo lo que aplique. Podés combinar varias secciones.</p>
+      </div>
+
+      @if (secciones().length === 0) {
+        <p class="vacio-msg">No hay filtros configurados para este hábito.</p>
+      }
+
+      <div class="acordeon">
+        @for (sec of secciones(); track sec.nombre) {
+          <div class="seccion" [class.abierta]="estaAbierta(sec.nombre)">
+
+            <button class="seccion-cabecera" (click)="toggleSeccion(sec.nombre)">
+              <span>{{ sec.nombre }}</span>
+              <span class="seccion-chevron">{{ estaAbierta(sec.nombre) ? '∨' : '›' }}</span>
+            </button>
+
+            @if (estaAbierta(sec.nombre)) {
+              <div class="seccion-cuerpo">
+                @for (campo of sec.campos; track campo.field_name) {
+                  <div class="campo">
+                    <p class="campo-nombre">{{ campo.field_name }}</p>
+                    <div class="chips">
+                      @for (opcion of campo.opciones; track opcion) {
+                        <button
+                          class="chip"
+                          [class.chip-activo]="estaSeleccionado(campo.field_name, opcion)"
+                          (click)="toggleChip(campo.field_name, opcion)">
+                          {{ opcion }}
+                        </button>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+
+          </div>
+        }
+      </div>
+
+      <div class="filtros-pie">
+        @if (cantidadSeleccionados() > 0) {
+          <span class="contador-filtros">{{ cantidadSeleccionados() }} filtro(s) seleccionado(s)</span>
+        }
+        <button
+          class="btn-buscar"
+          [disabled]="cargandoResultados()"
+          (click)="buscar()">
+          @if (cargandoResultados()) { Buscando... } @else { Buscar especies }
+        </button>
+      </div>
+
+    </div>
+  }
+
+  <!-- ── PASO 3: Resultados ────────────────────────────── -->
+  @if (paso() === 'resultados') {
+    <div class="paso-resultados">
+      <div class="resultados-encabezado">
+        <button class="btn-volver" (click)="volverAFiltros()">← Volver</button>
+        <p class="total-texto">{{ totalResultados() }} especie(s) encontrada(s)</p>
+      </div>
+
+      @if (resultadosExactos().length > 0) {
+        <h3 class="subtitulo-galeria">Resultados exactos</h3>
+        <div class="galeria">
+          @for (e of resultadosExactos(); track e.id) {
+            <div class="tarjeta-especie" (click)="irAFicha(e.id)">
+              @if (primeraFoto(e)) {
+                <img [src]="primeraFoto(e)" [alt]="e.scientific_name" class="tarjeta-foto" aria-label="foto de la tarjeta primera 2"/>
+              } @else {
+                <div class="tarjeta-sin-foto">Sin foto</div>
+              }
+              <div class="tarjeta-info">
+                <p class="tarjeta-nombre">{{ e.scientific_name }}</p>
+                <p class="tarjeta-familia">{{ e.family }}</p>
+                <span class="tarjeta-habito-badge">{{ e.habit }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      @if (resultadosSimilares().length > 0) {
+        <h3 class="subtitulo-galeria similares">Especies similares</h3>
+        <div class="galeria">
+          @for (e of resultadosSimilares(); track e.id) {
+            <div class="tarjeta-especie" (click)="irAFicha(e.id)">
+              @if (primeraFoto(e)) {
+                <img [src]="primeraFoto(e)" [alt]="e.scientific_name" class="tarjeta-foto" aria-label="foto de la tarjeta primera"/>
+              } @else {
+                <div class="tarjeta-sin-foto">Sin foto</div>
+              }
+              <div class="tarjeta-info">
+                <p class="tarjeta-nombre">{{ e.scientific_name }}</p>
+                <p class="tarjeta-familia">{{ e.family }}</p>
+                <span class="tarjeta-habito-badge">{{ e.habit }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      @if (resultados().length === 0) {
+        <div class="vacio-resultados">
+          <p>No se encontraron especies con esos filtros.</p>
+          <button class="btn-volver" (click)="volverAFiltros()">Intentar con otros filtros</button>
+        </div>
+      }
+
+      @if (totalPaginas() > 1) {
+        <div class="paginacion">
+          <button [disabled]="paginaActual() === 1" (click)="paginaAnterior()">← Anterior</button>
+          <span>Página {{ paginaActual() }} de {{ totalPaginas() }}</span>
+          <button [disabled]="paginaActual() === totalPaginas()" (click)="paginaSiguiente()">Siguiente →</button>
+        </div>
+      }
+
+    </div>
+  }
+
+</div>

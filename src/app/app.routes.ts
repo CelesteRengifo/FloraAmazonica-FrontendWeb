@@ -51,6 +51,13 @@ export const routes: Routes = [
           import('./funcionalidades/validacion/paginas/lista-registros-pendientes/lista-registros-pendientes').then(m => m.ListaRegistrosPendientes)
       },
       {
+        path: 'consulta',
+        canActivate: [rolGuard],
+        data: { roles: ['consultor'] },
+        loadComponent: () =>
+          import('./funcionalidades/consulta/paginas/buscador-morfologico/buscador-morfologico').then(m => m.BuscadorMorfologico)
+      },
+      {
         path: '',
         redirectTo: 'usuarios',
         pathMatch: 'full'
@@ -60,7 +67,7 @@ export const routes: Routes = [
   {
     path: 'no-autorizado',
     loadComponent: () =>
-      import('./funcionalidades/autenticacion/paginas/login/login').then(m => m.Login)
+    import('./funcionalidades/autenticacion/paginas/login/login').then(m => m.Login)
   },
   {
     path: '**',
