@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import {authGuard} from './core/guards/auth.guard';
-import {rolGuard} from './core/guards/rol.guard';
+import { authGuard } from './core/guards/auth.guard';
+import { rolGuard } from './core/guards/rol.guard';
 
 export const routes: Routes = [
-    {
+  {
     path: 'login',
     loadComponent: () =>
       import('./funcionalidades/autenticacion/paginas/login/login').then(m => m.Login)
@@ -44,6 +44,13 @@ export const routes: Routes = [
         ]
       },
       {
+        path: 'validacion',
+        canActivate: [rolGuard],
+        data: { roles: ['validador'] },
+        loadComponent: () =>
+          import('./funcionalidades/validacion/paginas/lista-registros-pendientes/lista-registros-pendientes').then(m => m.ListaRegistrosPendientes)
+      },
+      {
         path: '',
         redirectTo: 'usuarios',
         pathMatch: 'full'
@@ -59,5 +66,4 @@ export const routes: Routes = [
     path: '**',
     redirectTo: 'login'
   }
-
 ];

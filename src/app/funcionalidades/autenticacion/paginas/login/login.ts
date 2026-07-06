@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectorRef, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -22,14 +22,14 @@ type CampoRegistro =
   templateUrl: './login.html',
   styleUrl: './login.css'
 })
-export class Login {
+export class Login implements AfterViewInit {
+
+  @ViewChild('vid1') vid1!: ElementRef<HTMLVideoElement>;
+  @ViewChild('vid2') vid2!: ElementRef<HTMLVideoElement>;
 
   vistaActiva: 'login' | 'registro' = 'login';
 
-  loginForm = {
-    email: '',
-    password: ''
-  };
+  loginForm = { email: '', password: '' };
 
   registroForm = {
     first_name: '',
@@ -45,10 +45,7 @@ export class Login {
   error = '';
   mensajeExito = '';
 
-  erroresLogin: {
-    email?: string;
-    password?: string;
-  } = {};
+  erroresLogin: { email?: string; password?: string } = {};
 
   erroresRegistro: {
     first_name?: string;
@@ -65,20 +62,37 @@ export class Login {
     private cdr: ChangeDetectorRef
   ) {}
 
+  ngAfterViewInit(): void {
+    const v1 = this.vid1.nativeElement;
+    const v2 = this.vid2.nativeElement;
+
+    v1.muted = true;
+    v2.muted = true;
+
+    v1.style.opacity = '1';
+    v2.style.opacity = '0';
+    v1.play().catch(() => {});
+  }
+
+  onVideoTerminado(indice: number): void {
+    const actual = indice === 0 ? this.vid1.nativeElement : this.vid2.nativeElement;
+    const siguiente = indice === 0 ? this.vid2.nativeElement : this.vid1.nativeElement;
+
+    actual.style.opacity = '0';
+    actual.currentTime = 0;
+
+    siguiente.style.opacity = '1';
+    siguiente.play().catch(() => {});
+  }
+
   alternarContrasena(): void {
     this.mostrarContrasena = !this.mostrarContrasena;
-
-    setTimeout(() => {
-      document.getElementById('password')?.focus();
-    }, 0);
+    setTimeout(() => { document.getElementById('password')?.focus(); }, 0);
   }
 
   alternarContrasenaRegistro(): void {
     this.mostrarContrasenaRegistro = !this.mostrarContrasenaRegistro;
-
-    setTimeout(() => {
-      document.getElementById('password-registro')?.focus();
-    }, 0);
+    setTimeout(() => { document.getElementById('password-registro')?.focus(); }, 0);
   }
 
   cambiarVista(vista: 'login' | 'registro'): void {
@@ -100,10 +114,7 @@ export class Login {
   }
 
   private limpiarFormularioLogin(): void {
-    this.loginForm = {
-      email: '',
-      password: ''
-    };
+    this.loginForm = { email: '', password: '' };
   }
 
   private limpiarFormularioRegistro(): void {
@@ -130,7 +141,6 @@ export class Login {
   private validarLogin(): boolean {
     this.erroresLogin = {};
     let valido = true;
-
     const email = this.loginForm.email.trim();
     const password = this.loginForm.password.trim();
 
@@ -153,10 +163,8 @@ export class Login {
   private validarRegistro(): boolean {
     this.erroresRegistro = {};
     let valido = true;
-
     const firstName = this.registroForm.first_name.trim();
     const paternalLastName = this.registroForm.paternal_last_name.trim();
-    const maternalLastName = this.registroForm.maternal_last_name.trim();
     const email = this.registroForm.email.trim();
     const password = this.registroForm.password.trim();
 
@@ -164,12 +172,10 @@ export class Login {
       this.erroresRegistro.first_name = 'Los nombres son obligatorios.';
       valido = false;
     }
-
     if (!paternalLastName) {
       this.erroresRegistro.paternal_last_name = 'El apellido paterno es obligatorio.';
       valido = false;
     }
-
     if (!email) {
       this.erroresRegistro.email = 'El correo es obligatorio.';
       valido = false;
@@ -177,7 +183,6 @@ export class Login {
       this.erroresRegistro.email = 'Ingresa un correo válido.';
       valido = false;
     }
-
     if (!password) {
       this.erroresRegistro.password = 'La contraseña es obligatoria.';
       valido = false;
@@ -198,7 +203,6 @@ export class Login {
   onLogin(): void {
     this.error = '';
     this.mensajeExito = '';
-
     if (!this.validarLogin()) return;
 
     this.cargando = true;
@@ -212,7 +216,12 @@ export class Login {
         this.cargando = false;
         this.limpiarFormularioLogin();
         this.cdr.detectChanges();
-        this.router.navigate(['/']);
+
+        const rol = this.autenticacion.obtenerRol();
+        if (rol === 'administrador') this.router.navigate(['/usuarios']);
+        else if (rol === 'validador') this.router.navigate(['/validacion']);
+        else if (rol === 'consultor') this.router.navigate(['/consulta']);
+        else this.router.navigate(['/login']);
       },
       error: (err) => {
         this.cargando = false;
@@ -236,7 +245,6 @@ export class Login {
   onRegistro(): void {
     this.error = '';
     this.mensajeExito = '';
-
     if (!this.validarRegistro()) return;
 
     this.cargando = true;
@@ -255,14 +263,11 @@ export class Login {
     this.http.post(`${environment.apiUrl}/auth/registro`, datosRegistro).subscribe({
       next: () => {
         this.cargando = false;
-
         this.limpiarFormularioRegistro();
         this.erroresRegistro = {};
         this.error = '';
         this.mostrarContrasenaRegistro = false;
-
         this.mensajeExito = 'Cuenta creada con éxito. Espera que el administrador active tu acceso.';
-
         this.cdr.detectChanges();
       },
       error: (err) => {
