@@ -57,6 +57,7 @@ export class ModalSolicitudes {
         next: () => {
           this.cargando.set(null);
           this.solicitudConfirmada.emit();
+          this.solicitudEliminada.emit(usuario.id);
         },
         error: () => {
           this.cargando.set(null);

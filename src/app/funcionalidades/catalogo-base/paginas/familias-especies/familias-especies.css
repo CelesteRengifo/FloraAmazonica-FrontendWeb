@@ -74,6 +74,9 @@
   background: var(--verde-claro, #e8f2ec);
   font-weight: 500;
   color: var(--texto-secundario, #6e6e6a);
+  position: sticky;
+  top: 0;
+  z-index: 1;
 }
 
 .fila-especie {
@@ -137,8 +140,6 @@
   text-align: center;
   margin: 0;
 }
-
-/* ── Modal de edición ─────────────────────────────────────────── */
 
 .fondo-modal-edicion {
   position: fixed;

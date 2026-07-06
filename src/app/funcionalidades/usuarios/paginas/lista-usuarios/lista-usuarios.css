@@ -95,6 +95,7 @@
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  container-type: inline-size;
 }
 
 .estado-carga,
@@ -105,11 +106,20 @@
 
 @media (max-width: 640px) {
   .pagina-usuarios {
-    padding: 1rem;
+    padding: 1rem 0.75rem;
   }
 
   .encabezado-pagina h2 {
-    font-size: 2rem;
+    font-size: 1.6rem;
+  }
+
+  .icono-solicitudes {
+    width: 38px;
+    height: 38px;
+  }
+
+  .barra-filtros {
+    gap: 0.5rem;
   }
 
   .campo-busqueda {
@@ -118,5 +128,16 @@
 
   .selector-filtro {
     flex: 1;
+    min-width: calc(50% - 0.25rem);
+  }
+}
+
+@media (max-width: 380px) {
+  .encabezado-pagina h2 {
+    font-size: 1.35rem;
+  }
+
+  .selector-filtro {
+    min-width: 100%;
   }
 }
