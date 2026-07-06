@@ -67,6 +67,10 @@ export class Formulario implements OnInit {
   modalOpcionAbierto = false;
   opcionEnEdicion: { campo: CampoMorfologico; opcion?: ValorMorfologico } | null = null;
 
+  // Modal filtro
+  modalFiltroAbierto = false;
+  campoFiltroPendiente: CampoMorfologico | null = null;
+
   ngOnInit(): void {
     this.cargarTodo(this.habitoActual);
     this.cargarSeccionesRestantes();
@@ -244,7 +248,6 @@ export class Formulario implements OnInit {
   }
 
   // ---- Guardar cambios ----
-
   guardarCambios(): void {
     this.cargando = true;
     this.refrescar();
@@ -254,7 +257,7 @@ export class Formulario implements OnInit {
     this.items.forEach((item, i) => {
       if (item.tipo === 'seccion') {
         peticiones.push(
-          this.seccionesServicio.actualizar(item.seccion.id, { display_order: i }),
+          this.seccionesServicio.actualizar(item.seccion.id, { display_order: i * 100 }),
         );
         item.campos.forEach((campo, j) => {
           campo.opciones.forEach((opcion, k) => {
@@ -297,7 +300,6 @@ export class Formulario implements OnInit {
       },
     });
   }
-
   // ---- Secciones ----
 
   crearSeccion(): void {
@@ -341,7 +343,7 @@ export class Formulario implements OnInit {
       this.seccionesServicio.crear({
         habit: this.habitoActual,
         name: resultado.name,
-        display_order: this.items.length,
+        display_order: this.items.length * 100,  // ← aquí
       }).subscribe({
         next: () => {
           this.cerrarModalSeccion();
@@ -610,6 +612,42 @@ export class Formulario implements OnInit {
     });
   }
 
+  onToggleFiltro(campo: CampoMorfologico): void {
+    this.campoFiltroPendiente = campo;
+    this.modalFiltroAbierto = true;
+    this.refrescar();
+  }
+
+  cerrarModalFiltro(): void {
+    this.modalFiltroAbierto = false;
+    this.campoFiltroPendiente = null;
+    this.refrescar();
+  }
+
+  confirmarToggleFiltro(): void {
+    if (!this.campoFiltroPendiente) return;
+    const campo = this.campoFiltroPendiente;
+    const nuevoEstado = !campo.use_in_search;
+
+    this.modalFiltroAbierto = false;
+    this.campoFiltroPendiente = null;
+    this.cargando = true;
+    this.refrescar();
+
+    this.servicio.toggleFiltro(this.habitoActual, campo.field_name, nuevoEstado).subscribe({
+      next: () => {
+        this.recargarActual();
+        this.mostrarMensaje(nuevoEstado
+          ? 'Campo activado para búsquedas del filtro'
+          : 'Campo desactivado para búsquedas del filtro');
+      },
+      error: () => {
+        this.cargando = false;
+        this.mostrarMensaje('No se pudo actualizar el filtro');
+        this.refrescar();
+      },
+    });
+  }
   agregarOpcion(campo: CampoMorfologico): void {
     this.opcionEnEdicion = { campo };
     this.modalOpcionAbierto = true;

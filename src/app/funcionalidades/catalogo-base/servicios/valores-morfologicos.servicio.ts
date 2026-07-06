@@ -41,6 +41,11 @@ export class ValoresMorfologicosServicio {
     return this.http.patch<ValorMorfologico>(`${this.urlBase}/${id}/estado`, { is_active });
   }
 
+  /** PATCH /morfologia/filtro — activa o desactiva use_in_search para un campo completo */
+  toggleFiltro(habit: string, field_name: string, use_in_search: boolean): Observable<void> {
+    return this.http.patch<void>(`${this.urlBase}/filtro`, { habit, field_name, use_in_search });
+  }
+
   // ---- Operaciones compuestas (varias llamadas en paralelo) ----
 
   /**
@@ -131,6 +136,7 @@ export class ValoresMorfologicosServicio {
           is_required: v.is_required,
           display_order: v.display_order,
           activo: false,
+          use_in_search: false, 
           opciones: [],
         };
         mapa.set(clave, campo);
@@ -138,6 +144,7 @@ export class ValoresMorfologicosServicio {
       campo.opciones.push(v);
       campo.display_order = Math.min(campo.display_order, v.display_order);
       if (v.is_active) campo.activo = true;
+      if (v.use_in_search) campo.use_in_search = true;
     }
 
     const campos = [...mapa.values()];

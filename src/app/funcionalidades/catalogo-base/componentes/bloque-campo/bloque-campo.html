@@ -1,5 +1,3 @@
-<!-- funcionalidades/catalogo-base/componentes/bloque-campo/bloque-campo.html -->
-
 <div class="bloque" [class.inactivo]="!campo.activo">
 
   <div class="bloque-cabecera">
@@ -28,6 +26,19 @@
     <div class="bloque-acciones">
       <button class="btn-icono" type="button" title="Editar campo"
               (click)="onEditarCampo()">✎</button>
+
+      <button class="btn-filtro-texto" type="button"
+              [class.filtro-on]="campo.use_in_search"
+              [class.filtro-off]="!campo.use_in_search"
+              (click)="onToggleFiltro()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="2.2"
+            stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+        </svg>
+        {{ campo.use_in_search ? 'Activo para Filtro' : 'Desactivado para Filtro' }}
+      </button>
+
       <button class="btn-icono" type="button"
               [title]="campo.activo ? 'Desactivar campo' : 'Activar campo'"
               (click)="onAlternarCampo()">
@@ -36,14 +47,12 @@
     </div>
   </div>
 
-  <!-- Campo numérico -->
   @if (campo.field_type === 'number') {
     <div class="bloque-numerico">
       <span class="etiqueta-unidad">Unidad:</span>
       <span class="valor-unidad">{{ campo.opciones[0].option_value }}</span>
     </div>
   } @else {
-    <!-- Campo de opciones -->
     <div class="bloque-opciones">
       @for (opcion of campo.opciones; track opcion.id) {
         <div class="fila-opcion" [class.opcion-inactiva]="!opcion.is_active">

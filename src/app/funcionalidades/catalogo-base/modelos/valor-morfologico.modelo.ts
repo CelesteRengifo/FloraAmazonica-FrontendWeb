@@ -1,5 +1,3 @@
-// funcionalidades/catalogo-base/modelos/valor-morfologico.modelo.ts
-
 export type TipoSeleccion = 'single' | 'multiple';
 export type TipoCampo = 'option' | 'number';
 
@@ -12,12 +10,13 @@ export interface ValorMorfologico {
   habit: string;
   section: string;
   field_name: string;
-  option_value: string;   // en campo numérico: guarda la unidad (ej. "m", "cm")
+  option_value: string;
   selection_type: TipoSeleccion;
   field_type: TipoCampo;
   is_required: boolean;
   display_order: number;
   is_active: boolean;
+  use_in_search: boolean;
   created_at: string;
 }
 
@@ -52,5 +51,6 @@ export interface CampoMorfologico {
   is_required: boolean;
   display_order: number;
   activo: boolean;
+  use_in_search: boolean;
   opciones: ValorMorfologico[];
 }

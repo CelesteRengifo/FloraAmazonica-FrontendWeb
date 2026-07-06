@@ -1,5 +1,3 @@
-/* funcionalidades/catalogo-base/componentes/bloque-campo/bloque-campo.css */
-
 .bloque {
   background: #fff;
   border: 1px solid #e5e2db;
@@ -77,6 +75,7 @@
 
 .bloque-acciones {
   display: flex;
+  align-items: center;
   gap: 0.4rem;
   flex-shrink: 0;
 }
@@ -97,6 +96,37 @@
   background: #f2f0ea;
   border-color: #d8d5cd;
   color: #1a1a1a;
+}
+
+.btn-filtro-texto {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  height: 30px;
+  padding: 0 0.7rem;
+  border-radius: 8px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s, border-color 0.15s;
+}
+.btn-filtro-texto.filtro-on {
+  background: var(--verde-claro);
+  border: 1px solid #b2d4bf;
+  color: var(--verde-oscuro);
+}
+.btn-filtro-texto.filtro-on:hover {
+  background: #d0e8d8;
+}
+.btn-filtro-texto.filtro-off {
+  background: #fdeceb;
+  border: 1px solid #f0c4c0;
+  color: #b3372e;
+}
+.btn-filtro-texto.filtro-off:hover {
+  background: #f9dcda;
 }
 
 .bloque-opciones {
@@ -172,6 +202,7 @@
 .btn-agregar-opcion:hover {
   opacity: 0.75;
 }
+
 .bloque-numerico {
   border-top: 1px solid #eceae4;
   padding: 0.65rem 0.9rem 0.75rem 2.55rem;

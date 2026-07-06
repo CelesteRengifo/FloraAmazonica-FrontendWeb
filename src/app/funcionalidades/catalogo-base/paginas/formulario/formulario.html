@@ -74,10 +74,12 @@
 
               @for (campo of item.campos; track campo.clave) {
                 <div cdkDrag [cdkDragData]="campo" class="campo-drag">
+                  <!-- dentro de sección -->
                   <app-bloque-campo
                     [campo]="campo"
                     (editarCampo)="abrirEdicion($event)"
                     (alternarCampo)="alternarCampo($event)"
+                    (toggleFiltro)="onToggleFiltro($event)"
                     (agregarOpcion)="agregarOpcion($event)"
                     (editarOpcion)="editarOpcion($event)"
                     (alternarOpcion)="alternarOpcion($event)">
@@ -105,6 +107,7 @@
               [campo]="item.campo"
               (editarCampo)="abrirEdicion($event)"
               (alternarCampo)="alternarCampo($event)"
+              (toggleFiltro)="onToggleFiltro($event)"
               (agregarOpcion)="agregarOpcion($event)"
               (editarOpcion)="editarOpcion($event)"
               (alternarOpcion)="alternarOpcion($event)">
@@ -156,6 +159,22 @@
     (confirmar)="onConfirmarModalOpcion($event)"
     (cerrar)="cerrarModalOpcion()">
   </app-modal-opcion>
+}
+
+@if (modalFiltroAbierto && campoFiltroPendiente) {
+  <div class="overlay-filtro" (click)="cerrarModalFiltro()">
+    <div class="modal-filtro" (click)="$event.stopPropagation()">
+      <p class="modal-filtro-texto">
+        {{ campoFiltroPendiente.use_in_search
+          ? '¿Desea desactivar este campo para búsquedas del filtro?'
+          : '¿Desea activar este campo para búsquedas del filtro?' }}
+      </p>
+      <div class="modal-filtro-acciones">
+        <button class="btn-secundario" type="button" (click)="cerrarModalFiltro()">Rechazar</button>
+        <button class="btn-nuevo" type="button" (click)="confirmarToggleFiltro()">Aceptar</button>
+      </div>
+    </div>
+  </div>
 }
 
 @if (mensaje) {
