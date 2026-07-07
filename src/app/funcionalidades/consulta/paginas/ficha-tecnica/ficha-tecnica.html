@@ -37,10 +37,12 @@
           <!-- Foto principal -->
           <div class="foto-principal-wrap">
             @if (fotoActiva()) {
-              <img
-                [src]="fotoActiva()!.cloudinary_url"
+              <img [src]="fotoActiva()!.cloudinary_url"
                 [alt]="especie()!.scientific_name"
-                class="foto-principal" aria-label="fotoActiva"/>
+                class="foto-principal"
+                aria-label="fotoActiva"
+                draggable="false"
+                (contextmenu)="$event.preventDefault()"/>
               <div class="foto-principal-pie">
                 <span class="foto-tipo-label">{{ tipoFotoEtiqueta(fotoActiva()!.photo_type) }}</span>
                 <button
@@ -65,7 +67,10 @@
                   class="miniatura"
                   [class.activa]="fotoActiva()?.id === foto.id"
                   (click)="seleccionarFoto(foto)">
-                  <img [src]="foto.cloudinary_url" [alt]="tipoFotoEtiqueta(foto.photo_type)"  aria-label="miniatura"/>
+                  <img [src]="foto.cloudinary_url" [alt]="tipoFotoEtiqueta(foto.photo_type)"
+                    aria-label="miniatura"
+                    draggable="false"
+                    (contextmenu)="$event.preventDefault()"/>
                   <span class="miniatura-tipo">{{ tipoFotoEtiqueta(foto.photo_type) }}</span>
                 </div>
               }

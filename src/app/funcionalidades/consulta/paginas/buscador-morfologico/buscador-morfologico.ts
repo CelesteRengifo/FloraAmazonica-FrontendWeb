@@ -12,7 +12,7 @@ import {
 type Paso = 'habito' | 'filtros' | 'resultados';
 
 const HABITOS = [
-  { valor: 'árbol',    etiqueta: 'Árbol' },
+  { valor: 'arbol',    etiqueta: 'Árbol' },
   { valor: 'palmera',  etiqueta: 'Palmera' },
   { valor: 'arbusto',  etiqueta: 'Arbusto' },
   { valor: 'liana',    etiqueta: 'Liana' },
