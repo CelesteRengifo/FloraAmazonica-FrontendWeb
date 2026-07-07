@@ -19,8 +19,6 @@ export class BarraLateral {
   rol: string | null;
   elementosNav: ElementoNav[] = [];
 
-  // Guarda la etiqueta del grupo "fijado" por clic (no por hover).
-  // Solo un grupo puede estar fijado a la vez, como un acordeón normal.
   grupoFijado = signal<string | null>(null);
 
   constructor(private autenticacionServicio: AutenticacionServicio) {
@@ -48,17 +46,40 @@ export class BarraLateral {
           {
             etiqueta: 'Administrar catálogo',
             subElementos: [
-              { etiqueta: 'Familias y especies', ruta: '/catalogo/familias-especies' },
-              { etiqueta: 'Formulario', ruta: '/catalogo/formulario' },
+              {
+                etiqueta: 'Familias y especies',
+                ruta: '/catalogo/familias-especies',
+              },
+              {
+                etiqueta: 'Formulario',
+                ruta: '/catalogo/formulario',
+              },
             ],
           },
+          { etiqueta: 'Mi perfil', ruta: '/mi-perfil' },
         ];
+
       case 'validador':
-        return [{ etiqueta: 'Validación', ruta: '/validacion' }];
+        return [
+          { etiqueta: 'Validación', ruta: '/validacion' },
+          { etiqueta: 'Mi perfil', ruta: '/mi-perfil' },
+        ];
+
       case 'consultor':
-        return [{ etiqueta: 'Consulta', ruta: '/consulta' }];
+        return [
+          { etiqueta: 'Consulta', ruta: '/consulta' },
+          { etiqueta: 'Mi perfil', ruta: '/mi-perfil' },
+        ];
+
+      case 'registrador':
+        return [
+          { etiqueta: 'Mi perfil', ruta: '/mi-perfil' },
+        ];
+
       default:
-        return [];
+        return [
+          { etiqueta: 'Mi perfil', ruta: '/mi-perfil' },
+        ];
     }
   }
 }

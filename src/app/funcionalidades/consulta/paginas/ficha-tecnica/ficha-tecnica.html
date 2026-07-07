@@ -1,1 +1,238 @@
-<p>ficha-tecnica works!</p>
+<div class="ficha-pagina">
+
+  <!-- Cargando -->
+  @if (cargando()) {
+    <div class="estado-carga">
+      <p>Cargando ficha técnica...</p>
+    </div>
+  }
+
+  <!-- Error -->
+  @if (error() && !cargando()) {
+    <div class="estado-error">
+      <p>{{ error() }}</p>
+      <button class="btn-volver" (click)="volver()">← Volver al buscador</button>
+    </div>
+  }
+
+  <!-- Contenido -->
+  @if (especie() && !cargando()) {
+    <div class="ficha-contenido">
+
+      <!-- Encabezado -->
+      <div class="ficha-header">
+        <button class="btn-volver" (click)="volver()">← Volver</button>
+        <div class="ficha-titulo">
+          <h1 class="nombre-cientifico">{{ especie()!.scientific_name }}</h1>
+          <div class="ficha-badges">
+            <span class="badge-familia">{{ especie()!.family }}</span>
+            <span class="badge-habito">{{ especie()!.habit }}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Fotos -->
+      @if ((especie()?.photos?.length ?? 0) > 0) {
+        <section class="seccion-fotos">
+          <!-- Foto principal -->
+          <div class="foto-principal-wrap">
+            @if (fotoActiva()) {
+              <img
+                [src]="fotoActiva()!.cloudinary_url"
+                [alt]="especie()!.scientific_name"
+                class="foto-principal" aria-label="fotoActiva"/>
+              <div class="foto-principal-pie">
+                <span class="foto-tipo-label">{{ tipoFotoEtiqueta(fotoActiva()!.photo_type) }}</span>
+                <button
+                  class="btn-descargar"
+                  [disabled]="descargando()[fotoActiva()!.id]"
+                  (click)="descargarFoto(fotoActiva()!)">
+                  @if (descargando()[fotoActiva()!.id]) {
+                    Descargando...
+                  } @else {
+                    ↓ Descargar foto
+                  }
+                </button>
+              </div>
+            }
+          </div>
+
+          <!-- Miniaturas -->
+          @if (especie()!.photos.length > 1) {
+            <div class="miniaturas">
+              @for (foto of especie()!.photos; track foto.id) {
+                <div
+                  class="miniatura"
+                  [class.activa]="fotoActiva()?.id === foto.id"
+                  (click)="seleccionarFoto(foto)">
+                  <img [src]="foto.cloudinary_url" [alt]="tipoFotoEtiqueta(foto.photo_type)"  aria-label="miniatura"/>
+                  <span class="miniatura-tipo">{{ tipoFotoEtiqueta(foto.photo_type) }}</span>
+                </div>
+              }
+            </div>
+          }
+        </section>
+      }
+
+      <!-- Datos generales -->
+      <section class="seccion-datos">
+        <h2 class="seccion-titulo">Datos generales</h2>
+        <div class="datos-grilla">
+          @if (especie()!.life_type) {
+            <div class="dato-item">
+              <span class="dato-label">Tipo de vida</span>
+              <span class="dato-valor">{{ especie()!.life_type }}</span>
+            </div>
+          }
+          @if (especie()!.height) {
+            <div class="dato-item">
+              <span class="dato-label">Altura (m)</span>
+              <span class="dato-valor">{{ especie()!.height }}</span>
+            </div>
+          }
+          @if (especie()!.dap) {
+            <div class="dato-item">
+              <span class="dato-label">DAP (cm)</span>
+              <span class="dato-valor">{{ especie()!.dap }}</span>
+            </div>
+          }
+          @if (especie()!.cap) {
+            <div class="dato-item">
+              <span class="dato-label">CAP (cm)</span>
+              <span class="dato-valor">{{ especie()!.cap }}</span>
+            </div>
+          }
+          @if (especie()!.crown_diameter_parallel) {
+            <div class="dato-item">
+              <span class="dato-label">Copa paralela (m)</span>
+              <span class="dato-valor">{{ especie()!.crown_diameter_parallel }}</span>
+            </div>
+          }
+          @if (especie()!.crown_diameter_perpendicular) {
+            <div class="dato-item">
+              <span class="dato-label">Copa perpendicular (m)</span>
+              <span class="dato-valor">{{ especie()!.crown_diameter_perpendicular }}</span>
+            </div>
+          }
+          @if (especie()!.growth_stage) {
+            <div class="dato-item">
+              <span class="dato-label">Estado de crecimiento</span>
+              <span class="dato-valor">{{ especie()!.growth_stage }}</span>
+            </div>
+          }
+          @if (especie()!.bark_texture) {
+            <div class="dato-item">
+              <span class="dato-label">Textura de corteza</span>
+              <span class="dato-valor">{{ especie()!.bark_texture }}</span>
+            </div>
+          }
+          @if (especie()!.conservation_status) {
+            <div class="dato-item">
+              <span class="dato-label">Estado de conservación</span>
+              <span class="dato-valor">{{ especie()!.conservation_status }}</span>
+            </div>
+          }
+          @if (especie()!.health_status) {
+            <div class="dato-item">
+              <span class="dato-label">Estado sanitario</span>
+              <span class="dato-valor">{{ especie()!.health_status }}</span>
+            </div>
+          }
+          @if (distribucion() && (distribucion()?.total_points ?? 0) > 0) {
+            <div class="dato-item">
+              <span class="dato-label">Distribución</span>
+              <span class="dato-valor">{{ especie()!.country_distribution.join(', ') }}</span>
+            </div>
+          }
+        </div>
+
+        @if (especie()!.description) {
+          <div class="descripcion">
+            <span class="dato-label">Descripción</span>
+            <p class="descripcion-texto">{{ especie()!.description }}</p>
+          </div>
+        }
+
+        @if (especie()!.uses) {
+          <div class="descripcion">
+            <span class="dato-label">Usos</span>
+            <p class="descripcion-texto">{{ especie()!.uses }}</p>
+          </div>
+        }
+      </section>
+
+      <!-- Morfología dinámica -->
+      @if (morfologiaEntradas().length > 0) {
+        <section class="seccion-datos">
+          <h2 class="seccion-titulo">Caracteres morfológicos</h2>
+          <div class="datos-grilla">
+            @for (entrada of morfologiaEntradas(); track entrada.clave) {
+              <div class="dato-item">
+                <span class="dato-label">{{ entrada.clave }}</span>
+                <span class="dato-valor">{{ formatearValor(entrada.valor) }}</span>
+              </div>
+            }
+          </div>
+        </section>
+      }
+
+      <!-- Mapa de distribución -->
+      <section class="seccion-datos">
+        <h2 class="seccion-titulo">Distribución georreferenciada</h2>
+        @if (distribucion() && distribucion()!.total_points > 0) {
+          <p class="mapa-subtitulo">
+            {{ distribucion()!.total_points }} registro(s) validado(s) de
+            <em>{{ distribucion()!.scientific_name }}</em>
+          </p>
+          <div class="mapa-tabla-wrap">
+            <table class="mapa-tabla">
+              <thead>
+                <tr>
+                  <th>Código</th>
+                  <th>Latitud</th>
+                  <th>Longitud</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (punto of distribucion()!.points; track punto.id) {
+                  <tr>
+                    <td>{{ punto.tracking_code }}</td>
+                    <td>{{ punto.latitude }}</td>
+                    <td>{{ punto.longitude }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        } @else {
+          <p class="vacio-msg">No hay puntos de distribución registrados.</p>
+        }
+      </section>
+
+      <!-- Registrador -->
+      <section class="seccion-datos registrador-seccion">
+        <span class="dato-label">Registrado por</span>
+        <p class="registrador-nombre">{{ nombreRegistrador() }}</p>
+        @if (especie()!.tracking_code) {
+          <p class="tracking-code">Código: {{ especie()!.tracking_code }}</p>
+        }
+      </section>
+
+    </div>
+  }
+
+  <!-- Modal límite de descargas -->
+  @if (mostrarModalLimite()) {
+    <div class="modal-overlay" (click)="cerrarModalLimite()">
+      <div class="modal-cuerpo" (click)="$event.stopPropagation()">
+        <h3 class="modal-titulo">Límite diario alcanzado</h3>
+        <p class="modal-texto">
+          Alcanzaste el límite de 20 descargas diarias.
+          Podrás continuar descargando mañana.
+        </p>
+        <button class="btn-buscar" (click)="cerrarModalLimite()">Entendido</button>
+      </div>
+    </div>
+  }
+
+</div>
