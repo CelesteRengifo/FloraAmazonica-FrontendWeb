@@ -40,7 +40,7 @@ export class Formulario implements OnInit {
   private cdr = inject(ChangeDetectorRef);
 
   readonly habitos = HABITOS;
-  habitoActual: Habito = 'árbol';
+  habitoActual: Habito = 'arbol';
 
   valoresPorHabito: Record<string, ValorMorfologico[]> = {};
   seccionesPorHabito: Record<string, Seccion[]> = {};
