@@ -1,33 +1,33 @@
-<!-- ── Buscador por texto (siempre visible) ── -->
-<div class="buscador-texto-wrap">
-  <div class="buscador-texto-input-wrap">
-    <input
-      class="buscador-texto-input"
-      type="text"
-      placeholder="Buscar por nombre científico o familia..."
-      [value]="textoBusqueda()"
-      (input)="onInputTexto($event)"
-      (blur)="cerrarSugerencias()"
-      (keyup.enter)="buscarDirecto()" />
-    <button class="btn-buscar-texto" (click)="buscarDirecto()">Buscar</button>
-  </div>
-
-  @if (mostrarSugerencias()) {
-    <div class="sugerencias-lista">
-      @for (s of sugerencias(); track s) {
-        <div class="sugerencia-item" (click)="elegirSugerencia(s)">{{ s }}</div>
-      }
-    </div>
-  }
-</div>
-
 <div class="buscador-pagina">
+
+  <!-- ── Buscador por texto (siempre visible) ── -->
+  <div class="buscador-texto-wrap">
+    <div class="buscador-texto-input-wrap">
+      <input
+        class="buscador-texto-input"
+        type="text"
+        placeholder="Buscar por nombre científico o familia..."
+        [value]="textoBusqueda()"
+        (input)="onInputTexto($event)"
+        (blur)="cerrarSugerencias()"
+        (keyup.enter)="buscarDirecto()" />
+      <button class="btn-buscar-texto" (click)="buscarDirecto()">Buscar</button>
+    </div>
+
+    @if (mostrarSugerencias()) {
+      <div class="sugerencias-lista">
+        @for (s of sugerencias(); track s) {
+          <div class="sugerencia-item" (click)="elegirSugerencia(s)">{{ s }}</div>
+        }
+      </div>
+    }
+  </div>
 
   <!-- ── PASO 1: Elegir hábito ────────────────────────── -->
   @if (paso() === 'habito') {
     <div class="paso-habito">
       <h1 class="titulo-paso">¿Qué tipo de planta es?</h1>
-      <p class="subtitulo-paso">Marca todo lo que aplique. Puedes combinar varias secciones.</p>
+      <p class="subtitulo-paso">Elige el hábito que mejor se parece a la planta que buscas.</p>
 
       @if (error()) {
         <p class="error-msg">{{ error() }}</p>
@@ -62,7 +62,7 @@
       <div class="filtros-encabezado">
         <button class="btn-volver" (click)="volverAHabito()">← Volver</button>
         <h2 class="titulo-paso">¿Qué caracteres ves?</h2>
-        <p class="subtitulo-paso">Marque todo lo que desee aplicar en la búsqueda. Puede combinar campos de las distintas secciones.</p>
+        <p class="subtitulo-paso">Marca todo lo que aplique. Puedes combinar varias secciones.</p>
       </div>
 
       @if (secciones().length === 0) {
@@ -131,7 +131,7 @@
           @for (e of resultadosExactos(); track e.id) {
             <div class="tarjeta-especie" (click)="irAFicha(e.id)">
               @if (primeraFoto(e)) {
-                <img [src]="primeraFoto(e)" [alt]="e.scientific_name" class="tarjeta-foto" aria-label="foto de la tarjeta primera 2"/>
+                <img [src]="primeraFoto(e)" [alt]="e.scientific_name" class="tarjeta-foto" aria-label="Foto de {{ e.scientific_name }}" />
               } @else {
                 <div class="tarjeta-sin-foto">Sin foto</div>
               }
@@ -151,7 +151,7 @@
           @for (e of resultadosSimilares(); track e.id) {
             <div class="tarjeta-especie" (click)="irAFicha(e.id)">
               @if (primeraFoto(e)) {
-                <img [src]="primeraFoto(e)" [alt]="e.scientific_name" class="tarjeta-foto" aria-label="foto de la tarjeta primera"/>
+                <img [src]="primeraFoto(e)" [alt]="e.scientific_name" class="tarjeta-foto" aria-label="Foto de {{ e.scientific_name }}" />
               } @else {
                 <div class="tarjeta-sin-foto">Sin foto</div>
               }

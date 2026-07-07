@@ -35,9 +35,12 @@ export interface RegistroPendiente {
 export interface FichaRegistro extends RegistroPendiente {
   country_distribution: string[];
   height: number | null;
-  crown_diameter: number | null;
+  crown_diameter_parallel: number | null;       // antes: crown_diameter
+  crown_diameter_perpendicular: number | null;  // nuevo
+  crown_base_height: number | null;             // nuevo
   cap: number | null;
   dap: number | null;
+  bark_texture: string | null;                  // antes: tallocorteza (o como se llamaba)
   latitude: number | null;
   longitude: number | null;
   morphological_data: Record<string, any>;

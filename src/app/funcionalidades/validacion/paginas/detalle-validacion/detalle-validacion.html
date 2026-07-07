@@ -87,7 +87,7 @@
     </div>
 
     <!-- DATOS DASOMÉTRICOS -->
-    @if (ficha()!.height || ficha()!.cap || ficha()!.dap || ficha()!.crown_diameter) {
+    @if (ficha()!.height || ficha()!.cap || ficha()!.dap || ficha()!.crown_diameter_parallel || ficha()!.crown_diameter_perpendicular) {
       <div class="seccion">
         <h3 class="seccion-titulo">Datos dasométricos</h3>
         <div class="datos-grid">
@@ -109,10 +109,16 @@
               <span class="dato-valor">{{ ficha()!.dap }} cm</span>
             </div>
           }
-          @if (ficha()!.crown_diameter) {
+          @if (ficha()!.crown_diameter_parallel) {
             <div class="dato">
-              <span class="dato-label">Diámetro de copa</span>
-              <span class="dato-valor">{{ ficha()!.crown_diameter }} m</span>
+              <span class="dato-label">Diámetro de copa paralelo</span>
+              <span class="dato-valor">{{ ficha()!.crown_diameter_parallel }} m</span>
+            </div>
+          }
+          @if (ficha()!.crown_diameter_perpendicular) {
+            <div class="dato">
+              <span class="dato-label">Diámetro de copa perpendicular</span>
+              <span class="dato-valor">{{ ficha()!.crown_diameter_perpendicular }} m</span>
             </div>
           }
         </div>

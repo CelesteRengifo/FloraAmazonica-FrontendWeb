@@ -132,15 +132,13 @@ export class FichaTecnica implements OnInit {
   }
 
   tipoFotoEtiqueta(tipo: string): string {
-    const etiquetas: Record<string, string> = {
-      general:       'General',
-      hoja:          'Hoja',
-      flor:          'Flor',
-      fruto:         'Fruto',
-      tallo_corteza: 'Tallo / Corteza',
-      semilla:       'Semilla',
-      raiz:          'Raíz',
-    };
-    return etiquetas[tipo] ?? tipo;
-  }
+  const etiquetas: Record<string, string> = {
+    hoja:            'Hoja',
+    flor:            'Flor',
+    fruto:           'Fruto',
+    planta_completa: 'Planta completa',
+    semilla:         'Semilla',
+  };
+  return etiquetas[tipo] ?? tipo;
+}
 }

@@ -82,11 +82,11 @@ export class DetalleValidacion implements OnInit, OnChanges {
 
   getEtiquetaFoto(tipo: string): string {
     const map: Record<string, string> = {
+      hoja:            'Hoja',
+      flor:            'Flor',
+      fruto:           'Fruto',
       planta_completa: 'Planta completa',
-      hoja: 'Hoja',
-      flor: 'Flor',
-      fruto: 'Fruto',
-      tallo_corteza: 'Tallo y corteza',
+      semilla:         'Semilla',
     };
     return map[tipo] ?? tipo;
   }
