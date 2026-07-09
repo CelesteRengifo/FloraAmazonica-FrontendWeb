@@ -190,38 +190,124 @@
   margin-top: 4px;
 }
 
-/* ── Mapa (tabla de puntos) ── */
+/* ── Acordeón de características morfológicas ── */
+.acordeon-morf {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.morf-seccion {
+  border: 1px solid #e6e6e6;
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.morf-cabecera {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 13px 16px;
+  background: #f7f7f7;
+  border: none;
+  cursor: pointer;
+  font-size: 0.92rem;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  color: #333;
+  transition: background 0.15s;
+}
+
+.morf-seccion.abierta .morf-cabecera {
+  background: var(--verde-claro);
+  color: var(--verde-oscuro);
+}
+
+.morf-chevron { font-size: 1.05rem; }
+
+.morf-cuerpo {
+  padding: 16px;
+}
+
+/* ── Mapa Leaflet ── */
 .mapa-subtitulo {
   font-size: 0.9rem;
   color: #666;
   margin-bottom: 12px;
 }
 
-.mapa-tabla-wrap {
-  overflow-x: auto;
-}
-
-.mapa-tabla {
+.mapa-leaflet {
   width: 100%;
-  border-collapse: collapse;
-  font-size: 0.875rem;
+  height: 360px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 16px;
+  z-index: 0;
 }
 
-.mapa-tabla th {
-  background: var(--verde-claro);
-  color: var(--verde-oscuro);
-  padding: 8px 12px;
-  text-align: left;
+/* Asegura que los controles de Leaflet no floten sobre modales, etc. */
+.mapa-leaflet :is(.leaflet-pane, .leaflet-control) { z-index: 1; }
+
+/* ── Lista de registros con "Ver Mapa" ── */
+.registros-lista {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.registro-fila {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid #eee;
+  border-radius: 10px;
+  background: #fcfcfc;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.registro-fila:hover {
+  border-color: var(--verde-claro);
+  background: #fff;
+}
+
+.registro-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.registro-codigo {
+  font-size: 0.9rem;
   font-weight: 600;
+  color: #333;
+  font-family: monospace;
 }
 
-.mapa-tabla td {
-  padding: 8px 12px;
-  border-bottom: 1px solid #f0f0f0;
-  color: #444;
+.registro-coords {
+  font-size: 0.8rem;
+  color: #999;
 }
 
-.mapa-tabla tr:last-child td { border-bottom: none; }
+.btn-ver-mapa {
+  flex-shrink: 0;
+  background: var(--verde-oscuro);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  transition: background 0.15s;
+}
+
+.btn-ver-mapa:hover { background: var(--verde-hover); }
 
 .vacio-msg {
   color: #bbb;
@@ -293,3 +379,38 @@
 }
 
 .btn-buscar:hover { background: var(--verde-hover); }
+
+/* ── Responsive (celular) ── */
+@media (max-width: 600px) {
+  .ficha-pagina { padding: 16px; }
+
+  .nombre-cientifico { font-size: 1.45rem; }
+
+  .foto-principal { max-height: 280px; }
+
+  .foto-principal-pie {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+  }
+
+  .btn-descargar { width: 100%; }
+
+  .datos-grilla {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .mapa-leaflet { height: 280px; }
+
+  .registro-fila {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-ver-mapa { width: 100%; }
+}
+
+@media (max-width: 380px) {
+  .datos-grilla { grid-template-columns: 1fr; }
+}

@@ -37,10 +37,13 @@
         @for (h of habitos; track h.valor) {
           <button
             class="tarjeta-habito"
-            [class.sin-imagen]="h.valor === ''"
+            [class.con-imagen]="h.imagen !== ''"
+            [class.sin-imagen]="h.imagen === ''"
+            [style.background-image]="h.imagen ? 'url(' + h.imagen + ')' : null"
             [disabled]="cargandoFiltros()"
             (click)="elegirHabito(h.valor)">
-            @if (h.valor !== '') {
+            @if (h.imagen !== '') {
+              <span class="habito-degradado"></span>
               <span class="habito-etiqueta">{{ h.etiqueta }}</span>
             } @else {
               <span class="habito-icono">?</span>
@@ -138,7 +141,7 @@
               <div class="tarjeta-info">
                 <p class="tarjeta-nombre">{{ e.scientific_name }}</p>
                 <p class="tarjeta-familia">{{ e.family }}</p>
-                <span class="tarjeta-habito-badge">{{ e.habit }}</span>
+                <span class="tarjeta-habito-badge">{{ etiquetaHabito(e.habit) }}</span>
               </div>
             </div>
           }
@@ -158,7 +161,7 @@
               <div class="tarjeta-info">
                 <p class="tarjeta-nombre">{{ e.scientific_name }}</p>
                 <p class="tarjeta-familia">{{ e.family }}</p>
-                <span class="tarjeta-habito-badge">{{ e.habit }}</span>
+                <span class="tarjeta-habito-badge">{{ etiquetaHabito(e.habit) }}</span>
               </div>
             </div>
           }

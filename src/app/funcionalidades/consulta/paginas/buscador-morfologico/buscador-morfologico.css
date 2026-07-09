@@ -28,37 +28,86 @@
 
 .tarjeta-habito {
   position: relative;
-  height: 110px;
-  border-radius: 14px;
+  height: 130px;
+  border-radius: 16px;
   border: 2px solid transparent;
   background-color: var(--verde-oscuro);
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   color: white;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
   overflow: hidden;
-  transition: transform 0.15s, border-color 0.15s;
+  transition: transform 0.15s, border-color 0.15s, box-shadow 0.15s;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-end;
+  padding: 14px;
+}
+
+.tarjeta-habito.con-imagen:hover:not(:disabled) {
+  transform: translateY(-3px);
+  border-color: var(--verde-hover);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.22);
+}
+
+.tarjeta-habito:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Degradado oscuro encima de la imagen para que el texto se lea moderno */
+.habito-degradado {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.78) 0%,
+    rgba(0, 0, 0, 0.35) 45%,
+    rgba(0, 0, 0, 0.12) 100%
+  );
+  z-index: 1;
+  transition: background 0.15s;
+}
+
+.tarjeta-habito.con-imagen:hover:not(:disabled) .habito-degradado {
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0.72) 0%,
+    rgba(0, 0, 0, 0.28) 50%,
+    rgba(0, 0, 0, 0.06) 100%
+  );
+}
+
+.habito-etiqueta {
+  position: relative;
+  z-index: 2;
+  color: #fff;
+  font-weight: 700;
+  font-size: 1.15rem;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+}
+
+/* Botón "No estoy seguro" (sin imagen) */
+.tarjeta-habito.sin-imagen {
+  background-color: #f2f4f1;
+  color: #555;
+  border: 2px dashed #cfd6cd;
   justify-content: center;
   gap: 6px;
 }
 
-.tarjeta-habito:hover:not(:disabled) {
+.tarjeta-habito.sin-imagen:hover:not(:disabled) {
+  border-color: var(--verde-oscuro);
   transform: translateY(-2px);
-  border-color: var(--verde-hover);
 }
 
-.tarjeta-habito.sin-imagen {
-  background-color: #f0f0f0;
-  color: #555;
-  border: 2px solid #ddd;
-}
-
-.habito-etiqueta { color: white; font-weight: 700; font-size: 1rem; }
 .habito-etiqueta-oscura { color: #555; font-weight: 600; font-size: 0.95rem; }
-.habito-icono { font-size: 1.8rem; color: #999; }
+.habito-icono { font-size: 1.8rem; color: #b6bdb4; }
 
 .cargando-texto {
   text-align: center;
@@ -153,6 +202,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 .contador-filtros { font-size: 0.85rem; color: #888; }
@@ -179,6 +230,7 @@
   align-items: center;
   gap: 16px;
   margin-bottom: 20px;
+  flex-wrap: wrap;
 }
 
 .total-texto { color: #888; font-size: 0.9rem; }
@@ -348,4 +400,34 @@
 .sugerencia-item:hover {
   background: var(--verde-claro);
   color: var(--verde-oscuro);
+}
+
+/* ── Responsive (celular) ── */
+@media (max-width: 600px) {
+  .buscador-pagina { padding: 16px; }
+
+  .titulo-paso { font-size: 1.35rem; }
+
+  .grilla-habitos { gap: 12px; }
+
+  .tarjeta-habito { height: 115px; border-radius: 14px; }
+
+  .habito-etiqueta { font-size: 1.05rem; }
+
+  .galeria {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .tarjeta-foto, .tarjeta-sin-foto { height: 110px; }
+
+  .filtros-pie { justify-content: stretch; }
+  .filtros-pie .btn-buscar { flex: 1; }
+
+  .buscador-texto-input-wrap { flex-direction: column; }
+  .btn-buscar-texto { width: 100%; }
+}
+
+@media (max-width: 380px) {
+  .galeria { grid-template-columns: 1fr; }
 }

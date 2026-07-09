@@ -1,8 +1,8 @@
 import { Component, OnInit, signal, computed, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { Subject } from 'rxjs';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { Subject, of } from 'rxjs';
+import { debounceTime, distinctUntilChanged, switchMap, catchError } from 'rxjs/operators';
 import { ConsultaService } from '../../servicios/consulta.service';
 import {
   FiltroMorfologico,
@@ -13,13 +13,23 @@ import {
 type Paso = 'habito' | 'filtros' | 'resultados';
 
 const HABITOS = [
-  { valor: 'arbol',   etiqueta: 'Árbol' },
-  { valor: 'palmera', etiqueta: 'Palmera' },
-  { valor: 'arbusto', etiqueta: 'Arbusto' },
-  { valor: 'liana',   etiqueta: 'Liana' },
-  { valor: 'hierba',  etiqueta: 'Hierba' },
-  { valor: '',        etiqueta: 'No estoy seguro' },
+  { valor: 'arbol',   etiqueta: 'Árbol',          imagen: '/arbol.png' },
+  { valor: 'palmera', etiqueta: 'Palmera',        imagen: '/palmera.jpg' },
+  { valor: 'arbusto', etiqueta: 'Arbusto',        imagen: '/arbusto.jpeg' },
+  { valor: 'liana',   etiqueta: 'Liana',          imagen: '/liana.png' },
+  { valor: 'hierba',  etiqueta: 'Hierba',         imagen: '/hierba.png' },
+  { valor: '',        etiqueta: 'No estoy seguro', imagen: '' },
 ];
+
+// Mapa para mostrar el hábito bonito (con tilde y mayúscula) donde el backend
+// lo devuelve en minúscula y sin acento (arbol, hierba, ...).
+const ETIQUETAS_HABITO: Record<string, string> = {
+  arbol:   'Árbol',
+  palmera: 'Palmera',
+  arbusto: 'Arbusto',
+  liana:   'Liana',
+  hierba:  'Hierba',
+};
 
 @Component({
   selector: 'app-buscador-morfologico',
@@ -91,12 +101,16 @@ export class BuscadorMorfologico implements OnInit {
       debounceTime(300),
       distinctUntilChanged(),
       switchMap(texto => {
-        if (texto.length < 2) {
+        if (texto.trim().length < 2) {
           this.sugerencias.set([]);
           this.mostrarSugerencias.set(false);
-          return [];
+          return of([]);
         }
-        return this.consulta.getSugerencias(texto);
+        // catchError DENTRO del switchMap: si una petición falla, el stream
+        // sobrevive y las siguientes teclas siguen mostrando sugerencias.
+        return this.consulta.getSugerencias(texto).pipe(
+          catchError(() => of([] as string[]))
+        );
       })
     ).subscribe({
       next: (resultado) => {
@@ -105,6 +119,19 @@ export class BuscadorMorfologico implements OnInit {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  // ── Presentación ─────────────────────────────────────────────────────────
+
+  /** arbol → Árbol, hierba → Hierba, etc. Con fallback capitalizando. */
+  etiquetaHabito(valor?: string): string {
+    if (!valor) return '';
+    const clave = valor
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim();
+    return ETIQUETAS_HABITO[clave] ?? (valor.charAt(0).toUpperCase() + valor.slice(1));
   }
 
   // ── Autocomplete ─────────────────────────────────────────────────────────

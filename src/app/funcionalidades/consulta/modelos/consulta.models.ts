@@ -7,6 +7,14 @@ export interface FiltroMorfologico {
   opciones: string[];
 }
 
+// ─── Estructura morfológica: GET /catalogo/estructura-morfologica ────────
+// Devuelve, para un hábito, todos los campos activos con su sección.
+// Se usa en la ficha técnica para agrupar los caracteres por sección.
+export interface EstructuraMorfologicaCampo {
+  section: string;      // '' si el campo no tiene sección
+  field_name: string;
+}
+
 // ─── Foto y registrador ─────────────────────────────────────────────────
 export interface FotoEspecie {
   id: string;
@@ -30,6 +38,7 @@ export interface EspecieRegistro {
   family: string;
   habit: string;
   life_type?: string;
+  local_name?: string;
   country_distribution: string[];
 
   height?: number;
@@ -44,14 +53,7 @@ export interface EspecieRegistro {
 
   morphological_data: Record<string, any>;
 
-  description?: string;
-  growth_stage?: string;
-  bark_texture?: string;
-  uses?: string;
-  conservation_status?: string;
-  health_status?: string;
   author_name?: string;
-
   validated_at?: string;
   photos: FotoEspecie[];
   registrar?: RegistradorResumen;

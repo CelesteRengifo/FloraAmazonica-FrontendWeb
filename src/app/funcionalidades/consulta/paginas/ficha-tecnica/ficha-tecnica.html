@@ -26,7 +26,7 @@
           <h1 class="nombre-cientifico">{{ especie()!.scientific_name }}</h1>
           <div class="ficha-badges">
             <span class="badge-familia">{{ especie()!.family }}</span>
-            <span class="badge-habito">{{ especie()!.habit }}</span>
+            <span class="badge-habito">{{ etiquetaHabito(especie()!.habit) }}</span>
           </div>
         </div>
       </div>
@@ -79,14 +79,20 @@
         </section>
       }
 
-      <!-- Datos generales -->
+      <!-- ── Características generales ──────────────────────────── -->
       <section class="seccion-datos">
-        <h2 class="seccion-titulo">Datos generales</h2>
+        <h2 class="seccion-titulo">Características generales</h2>
         <div class="datos-grilla">
+          @if (especie()!.local_name) {
+            <div class="dato-item">
+              <span class="dato-label">Nombre local</span>
+              <span class="dato-valor">{{ especie()!.local_name }}</span>
+            </div>
+          }
           @if (especie()!.life_type) {
             <div class="dato-item">
               <span class="dato-label">Tipo de vida</span>
-              <span class="dato-valor">{{ especie()!.life_type }}</span>
+              <span class="dato-valor">{{ capitalizar(especie()!.life_type) }}</span>
             </div>
           }
           @if (especie()!.height) {
@@ -119,30 +125,6 @@
               <span class="dato-valor">{{ especie()!.crown_diameter_perpendicular }}</span>
             </div>
           }
-          @if (especie()!.growth_stage) {
-            <div class="dato-item">
-              <span class="dato-label">Estado de crecimiento</span>
-              <span class="dato-valor">{{ especie()!.growth_stage }}</span>
-            </div>
-          }
-          @if (especie()!.bark_texture) {
-            <div class="dato-item">
-              <span class="dato-label">Textura de corteza</span>
-              <span class="dato-valor">{{ especie()!.bark_texture }}</span>
-            </div>
-          }
-          @if (especie()!.conservation_status) {
-            <div class="dato-item">
-              <span class="dato-label">Estado de conservación</span>
-              <span class="dato-valor">{{ especie()!.conservation_status }}</span>
-            </div>
-          }
-          @if (especie()!.health_status) {
-            <div class="dato-item">
-              <span class="dato-label">Estado sanitario</span>
-              <span class="dato-valor">{{ especie()!.health_status }}</span>
-            </div>
-          }
           @if (distribucion() && (distribucion()?.total_points ?? 0) > 0) {
             <div class="dato-item">
               <span class="dato-label">Distribución</span>
@@ -150,64 +132,67 @@
             </div>
           }
         </div>
-
-        @if (especie()!.description) {
-          <div class="descripcion">
-            <span class="dato-label">Descripción</span>
-            <p class="descripcion-texto">{{ especie()!.description }}</p>
-          </div>
-        }
-
-        @if (especie()!.uses) {
-          <div class="descripcion">
-            <span class="dato-label">Usos</span>
-            <p class="descripcion-texto">{{ especie()!.uses }}</p>
-          </div>
-        }
       </section>
 
-      <!-- Morfología dinámica -->
-      @if (morfologiaEntradas().length > 0) {
+      <!-- ── Características morfológicas (por sección, acordeón) ── -->
+      @if (seccionesMorfologicas().length > 0) {
         <section class="seccion-datos">
-          <h2 class="seccion-titulo">Caracteres morfológicos</h2>
-          <div class="datos-grilla">
-            @for (entrada of morfologiaEntradas(); track entrada.clave) {
-              <div class="dato-item">
-                <span class="dato-label">{{ entrada.clave }}</span>
-                <span class="dato-valor">{{ formatearValor(entrada.valor) }}</span>
+          <h2 class="seccion-titulo">Características morfológicas</h2>
+
+          <div class="acordeon-morf">
+            @for (sec of seccionesMorfologicas(); track sec.nombre) {
+              <div class="morf-seccion" [class.abierta]="seccionAbierta(sec.nombre)">
+                <button class="morf-cabecera" (click)="toggleSeccionMorf(sec.nombre)">
+                  <span>{{ sec.nombre }}</span>
+                  <span class="morf-chevron">{{ seccionAbierta(sec.nombre) ? '∨' : '›' }}</span>
+                </button>
+
+                @if (seccionAbierta(sec.nombre)) {
+                  <div class="morf-cuerpo">
+                    <div class="datos-grilla">
+                      @for (entrada of sec.campos; track entrada.clave) {
+                        <div class="dato-item">
+                          <span class="dato-label">{{ entrada.etiqueta }}</span>
+                          <span class="dato-valor">{{ formatearValor(entrada.valor) }}</span>
+                        </div>
+                      }
+                    </div>
+                  </div>
+                }
               </div>
             }
           </div>
         </section>
       }
 
-      <!-- Mapa de distribución -->
+      <!-- ── Distribución georreferenciada ─────────────────────── -->
       <section class="seccion-datos">
         <h2 class="seccion-titulo">Distribución georreferenciada</h2>
+
         @if (distribucion() && distribucion()!.total_points > 0) {
           <p class="mapa-subtitulo">
             {{ distribucion()!.total_points }} registro(s) validado(s) de
             <em>{{ distribucion()!.scientific_name }}</em>
           </p>
-          <div class="mapa-tabla-wrap">
-            <table class="mapa-tabla">
-              <thead>
-                <tr>
-                  <th>Código</th>
-                  <th>Latitud</th>
-                  <th>Longitud</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (punto of distribucion()!.points; track punto.id) {
-                  <tr>
-                    <td>{{ punto.tracking_code }}</td>
-                    <td>{{ punto.latitude }}</td>
-                    <td>{{ punto.longitude }}</td>
-                  </tr>
-                }
-              </tbody>
-            </table>
+
+          <!-- Mapa con todos los puntos -->
+          <div #mapaContainer class="mapa-leaflet"></div>
+
+          <!-- Lista de registros con botón "Ver Mapa" -->
+          <div class="registros-lista">
+            @for (punto of distribucion()!.points; track punto.id) {
+              <div class="registro-fila">
+                <div class="registro-info">
+                  <span class="registro-codigo">{{ punto.tracking_code }}</span>
+                  <span class="registro-coords">
+                    {{ punto.latitude }}, {{ punto.longitude }}
+                  </span>
+                </div>
+                <button class="btn-ver-mapa" (click)="verEnMapa(punto)">
+                  Ver Mapa
+                </button>
+              </div>
+            }
           </div>
         } @else {
           <p class="vacio-msg">No hay puntos de distribución registrados.</p>

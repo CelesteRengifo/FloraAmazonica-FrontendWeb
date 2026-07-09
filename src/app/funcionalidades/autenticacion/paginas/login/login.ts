@@ -55,7 +55,7 @@ export class Login implements AfterViewInit, OnDestroy {
   readonly LINK_IOS     = 'https://drive.google.com/drive/folders/1NB3ok5NjitdD9GjYn-_jtDY-qCtNicxi?usp=sharing';
 
   // ── Typewriter ──
-  private readonly PALABRAS = ['EXPLORA', 'REGISTRA', 'PROTEGE', 'DESCUBRE'];
+  private readonly PALABRAS = ['EXPLORA', 'REGISTRA', 'IDENTIFICA', 'DESCUBRE', 'FOTOGRAFÍA', 'DOCUMENTA', 'CONSULTA', 'CLASIFICA', 'CONSERVA', 'APRENDE'];
   private twIndice = 0;
   private twChar = 0;
   private twBorrando = false;

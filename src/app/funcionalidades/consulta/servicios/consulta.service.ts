@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import {
   FiltroMorfologico,
+  EstructuraMorfologicaCampo,
   ResultadoBusqueda,
   EspecieRegistro,
   Distribucion,
@@ -27,6 +28,25 @@ export class ConsultaService {
     return this.http.get<FiltroMorfologico[]>(`${this.base}/filtros`, {
       params,
     });
+  }
+
+  /**
+   * Estructura de campos morfológicos (campo → sección) para un hábito.
+   * Se usa en la ficha técnica para agrupar los caracteres por sección.
+   */
+  getEstructuraMorfologica(
+    habit?: string,
+  ): Observable<EstructuraMorfologicaCampo[]> {
+    let params = new HttpParams();
+
+    if (habit) {
+      params = params.set('habit', habit);
+    }
+
+    return this.http.get<EstructuraMorfologicaCampo[]>(
+      `${this.base}/estructura-morfologica`,
+      { params },
+    );
   }
 
   buscar(opciones: {
